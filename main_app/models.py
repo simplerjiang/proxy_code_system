@@ -21,9 +21,10 @@ class web_admin(models.Model):
     admin_name = models.CharField(verbose_name="管理员账户名", max_length=30)
     admin_password = models.CharField(verbose_name="管理员密码", max_length=30)
 """
+class Admin_code(models.Model):
+    code = models.CharField(verbose_name="API用密链",max_length=50)
 
-
-class software(models.Model):
+class Software(models.Model):
     software_id = models.PositiveIntegerField(verbose_name="软件ID", unique=True)
     software_name = models.CharField(verbose_name="软件名", max_length=30)
     software_version_number = models.CharField(verbose_name="软件版本号", max_length=30)
@@ -35,8 +36,8 @@ class software(models.Model):
         return self.software_id
 
 
-class authorization(models.Model):
-    software = models.ForeignKey(software, verbose_name="软件对象")
+class Authorization(models.Model):
+    software = models.ForeignKey(Software, verbose_name="软件对象")
     customer_QQ = models.PositiveIntegerField(verbose_name="客户的QQ")
     proxy_man = models.ForeignKey(User,verbose_name="代理")
     bot_QQ = models.PositiveIntegerField("机器人的QQ")
@@ -44,8 +45,10 @@ class authorization(models.Model):
     deadline_time = models.DateField(verbose_name="到期时间",auto_now_add=True)
 
 
-class time_code(models.Model):
-    software = models.ForeignKey(software, verbose_name="软件对象")
+class Time_code(models.Model):
+    software = models.ForeignKey(Software, verbose_name="软件对象")
     time = models.PositiveIntegerField(verbose_name="时长")
     code = models.CharField(verbose_name="卡密",max_length=10)
     cost = models.PositiveIntegerField(verbose_name="价格")
+    proxy_man = models.ForeignKey(User,verbose_name="代理",null=True)
+

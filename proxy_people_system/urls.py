@@ -15,7 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-
+from main_app.views import *
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^api/api_test/',api_test,name="api_test"),
+    url(r'^api/admin_proxy_account_add_api',admin_proxy_account_add_API,name='admin_proxy_account_add_API'),
+    url(r'^api/admin_proxy_account_topup',admin_proxy_account_topup,name='admin_proxy_account_topup'),
+    url(r'^api/admin_proxy_account_balance_setup',admin_proxy_account_balance_setup,name='admin_proxy_account_balance_setup'),
+    url(r'^api/proxy_account_balance_check',proxy_account_balance_check,name='proxy_account_balance_check'),
 ]
