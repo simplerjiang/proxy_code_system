@@ -23,4 +23,8 @@ urlpatterns = [
     url(r'^api/admin_proxy_account_topup',admin_proxy_account_topup,name='admin_proxy_account_topup'),
     url(r'^api/admin_proxy_account_balance_setup',admin_proxy_account_balance_setup,name='admin_proxy_account_balance_setup'),
     url(r'^api/proxy_account_balance_check',proxy_account_balance_check,name='proxy_account_balance_check'),
+    url(r'^api/proxy_account_login',proxy_account_login,name='proxy_account_login'),
+    url(r'^api/proxy_account_change_password',proxy_account_change_password,name='proxy_account_change_password'),
+    url(r'^api/admin_proxy_account_change_password',admin_proxy_account_change_password,name='admin_proxy_account_change_password'),
+    url(r'^api/proxy_account_ad_change',proxy_account_ad_change,name='proxy_account_ad_change'),
 ]
