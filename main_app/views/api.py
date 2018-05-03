@@ -15,6 +15,26 @@ def dump_and_response(data): #checked
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
+"""
+可通过TOKEN或username找代理账号
+返回一个列表，第一个是User对象，第二个是Others_info对象。
+"""
+def get_proxy_account(TOKEN=None,username=None):
+    if TOKEN != None:
+        try:
+            user_others_info = Others_info.objects.get(TOKEN=TOKEN)
+            return [user_others_info.user,user_others_info]
+        except Others_info.DoesNotExist or User.DoesNotExist:
+            return False
+    elif username != None:
+        try:
+            user_object = User.objects.get_by_natural_key(username=username)
+            user_others_info = Others_info.objects.get(user=user_object)
+            return [user_object,user_others_info]
+        except Others_info.DoesNotExist or User.DoesNotExist:
+            return False
+
+
 def api_test(request):
     try:
         test = Admin_code.objects.get(code = request.GET["admin_code"])
@@ -33,7 +53,7 @@ def admin_code_check(admin_code): #checked
 
 """
 代理账户开户API
-url:http://127.0.0.1:8000/api/admin_proxy_account_add_api/?admin_code=testtest&proxy_username=Kong1&proxy_password=testtest
+url:http://127.0.0.1:8000/api/admin_proxy_account_add_api/?admin_code=testtest&proxy_username=Kong4&proxy_password=testtest&proxy_ad=测试广告&proxy_balance=88
 参数:
 admin_code = 管理员代码
 proxy_username = 代理账户名
@@ -47,7 +67,7 @@ proxy_balance = 代理账户金额（不写默认为0)
 "Error,bad request method POST" 错误的请求模式
 """
 
-def admin_proxy_account_add_API(request): #已测试
+def admin_proxy_account_add_API(request): #已测试1
     if request.method == "POST":
         return dump_and_response("Error,bad request method POST")
     admin_code = request.GET['admin_code']
@@ -65,8 +85,10 @@ def admin_proxy_account_add_API(request): #已测试
         proxy_balance = 0
     user_object = authenticate(username = proxy_username,password = proxy_password)
     if user_object is None:
-        user_object = User.objects.create_user(username=proxy_username,password=proxy_password,first_name=proxy_ad,last_name=proxy_balance)
+        user_object = User.objects.create_user(username=proxy_username,password=proxy_password)
+        user_others_info = Others_info.objects.create(user=user_object,ad=proxy_ad,balance=proxy_balance)
         user_object.save()
+        user_others_info.save()
         return dump_and_response("Success")
     else:
         return dump_and_response("Fail,account already existed")
@@ -88,7 +110,7 @@ money 添加金额
 "Proxy account not existed" 代理账号不存在
 """
 
-def admin_proxy_account_topup(request): #已测试
+def admin_proxy_account_topup(request): #已测试1
     if request.method == "POST":
         return dump_and_response("Error,bad request method POST")
     admin_code = request.GET['admin_code']
@@ -97,12 +119,12 @@ def admin_proxy_account_topup(request): #已测试
     proxy_username = request.GET['proxy_username']
     money = request.GET['money']
     try:
-        user_object = User.objects.get_by_natural_key(username=proxy_username)
-        user_balance = user_object.last_name
-        user_balance = str(int(user_balance) +int(money))
-        user_object.last_name = user_balance
-        user_object.save()
-        return dump_and_response(["Success",user_object.last_name])
+        user = get_proxy_account(username=proxy_username)
+        user_balance = user[1].balance
+        user_balance = int(user_balance) +int(money)
+        user[1].balance = user_balance
+        user[1].save()
+        return dump_and_response(["Success",user[1].balance])
     except User.DoesNotExist:
         return dump_and_response("Proxy account not existed")
 
@@ -126,7 +148,7 @@ money 设置金钱
 "Error, money less than 0" money参数小于0
 """
 
-def admin_proxy_account_balance_setup(request): #已测试
+def admin_proxy_account_balance_setup(request): #已测试1
     if request.method == "POST":
         return dump_and_response("Error, bad request method POST")
     admin_code = request.GET['admin_code']
@@ -141,31 +163,32 @@ def admin_proxy_account_balance_setup(request): #已测试
     if money < 0:
         return dump_and_response("Error, money less than 0")
     try:
-        user_object = User.objects.get_by_natural_key(username=proxy_username)
-        user_object.last_name = str(money)
-        user_object.save()
-        return dump_and_response(["Success",user_object.last_name])
+        user = get_proxy_account(username=proxy_username)
+        user[1].balance = money
+        user[1].save()
+        return dump_and_response(["Success",user[1].balance])
     except User.DoesNotExist:
         return dump_and_response("Proxy account not existed")
 
 """
 代理金额查询 (管理员及代理可用，不需要管理员代码）
-url:
+url:http://127.0.0.1:8000/api/proxy_account_balance_check/?proxy_username=Kong5
 
 参数：
 proxy_username 代理账号
 返回值：
-"30" 正确返回则返回目前余额
+"30" 正确返回则返回目前余额(字符串）
 "Error,bad request method POST" 错误的请求模式
 "Proxy account not existed" 代理账号不存在
+
 """
-def proxy_account_balance_check(request): #已测试
+def proxy_account_balance_check(request): #已测试1
     if request.method == "POST":
         return dump_and_response("Error, bad request method POST")
     proxy_username = request.GET['proxy_username']
     try:
-        user_object = User.objects.get_by_natural_key(username=proxy_username)
-        return dump_and_response(user_object.last_name)
+        user = get_proxy_account(username=proxy_username)
+        return dump_and_response(str(user[1].balance))
     except User.DoesNotExist:
         return dump_and_response("Proxy account not existed")
 
@@ -230,9 +253,13 @@ def proxy_account_login(request): #已测试
     user = authenticate(username=username,password=password)
     if user != None:
         if user.is_active:
-            user.email = get_TOKEN(15)
-            user.save()
-            return dump_and_response(user.email)
+            try:
+                user_others_info = Others_info.objects.get(user=user)
+                user_others_info.TOKEN = get_TOKEN(15)
+                user_others_info.save()
+                return dump_and_response(user_others_info.TOKEN)
+            except Others_info.DoesNotExist:
+                return dump_and_response("Error, account is Not exsited or password is fail")
         else:
             return dump_and_response("Error, account is Not exsited or password is fail")
     else:
