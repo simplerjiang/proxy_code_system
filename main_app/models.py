@@ -6,6 +6,25 @@ from django.contrib.auth.models import User
 import random
 
 
+"""
+这里使用Django自带的User进行储存代理。
+User.username 是代理账户名。
+User.password 是代理密码，数据库中储存哈希值
+User.first_name 
+User.last_name 
+User.email 都是可选字段，预留给以后的
+由于返回值可能是字符串
+下面将扩展一个Others_info 模型类，用于存放用户金额，广告，以及TOKEN信息
+"""
+class Others_info(models.Model):
+    user = models.OneToOneField(User)
+    balance = models.PositiveIntegerField(verbose_name="用户余额",default=0)
+    ad = models.CharField(verbose_name="代理广告",max_length=30)
+    TOKEN = models.CharField(verbose_name="API密链",max_length=15,unique=True)
+
+
+
+
 def get_TOKEN(num=15): #获取随机TOKEN，通过传入位数。
     while 1:
         a = "1234567890"
@@ -16,20 +35,9 @@ def get_TOKEN(num=15): #获取随机TOKEN，通过传入位数。
             sa.append(random.choice(a))
         sa = "".join(sa)
         try:
-            User.objects.get(email=sa)
-        except:
+            Others_info.objects.get(TOKEN=sa)
+        except Others_info.DoesNotExist:
             return sa
-
-"""
-这里使用Django自带的User进行储存代理。
-User.username 是代理账户名。
-User.password 是代理密码，数据库中储存哈希值
-User.first_name 是代理广告
-User.last_name 是账户金额
-User.email 是随机生成的TOKEN，每次登陆会有修改。
-由于返回值可能是字符串，所以要进行转换类型
-"""
-
 """
 #暂时不需要
 class web_admin(models.Model):
@@ -67,4 +75,6 @@ class Time_code(models.Model):
     cost = models.PositiveIntegerField(verbose_name="价格")
     proxy_man = models.ForeignKey(User,verbose_name="代理",null=True)
     used = models.BooleanField(verbose_name="是否使用过",default=False)
+
+
 
