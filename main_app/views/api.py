@@ -24,14 +24,14 @@ def get_proxy_account(TOKEN=None,username=None):
         try:
             user_others_info = Others_info.objects.get(TOKEN=TOKEN)
             return [user_others_info.user,user_others_info]
-        except Others_info.DoesNotExist or User.DoesNotExist:
+        except:
             return False
     elif username != None:
         try:
             user_object = User.objects.get_by_natural_key(username=username)
             user_others_info = Others_info.objects.get(user=user_object)
             return [user_object,user_others_info]
-        except Others_info.DoesNotExist or User.DoesNotExist:
+        except:
             return False
 
 
@@ -96,7 +96,7 @@ def admin_proxy_account_add_API(request): #已测试1
 
 """
 代理账户充值
-url:url:http://127.0.0.1:8000/api/admin_proxy_account_topup/?admin_code=testtest&proxy_username=Kong2&money=30
+url:http://127.0.0.1:8000/api/admin_proxy_account_topup/?admin_code=testtest&proxy_username=Kong2&money=30
 
 参数：
 admin_code 管理员代码
@@ -118,14 +118,14 @@ def admin_proxy_account_topup(request): #已测试1
         return dump_and_response("Error, admin code wrong")
     proxy_username = request.GET['proxy_username']
     money = request.GET['money']
-    try:
-        user = get_proxy_account(username=proxy_username)
+    user = get_proxy_account(username=proxy_username)
+    if user:
         user_balance = user[1].balance
         user_balance = int(user_balance) +int(money)
         user[1].balance = user_balance
         user[1].save()
         return dump_and_response(["Success",user[1].balance])
-    except User.DoesNotExist:
+    else:
         return dump_and_response("Proxy account not existed")
 
 """
@@ -162,12 +162,12 @@ def admin_proxy_account_balance_setup(request): #已测试1
         return dump_and_response("Error, money type wrong")
     if money < 0:
         return dump_and_response("Error, money less than 0")
-    try:
-        user = get_proxy_account(username=proxy_username)
+    user = get_proxy_account(username=proxy_username)
+    if user:
         user[1].balance = money
         user[1].save()
         return dump_and_response(["Success",user[1].balance])
-    except User.DoesNotExist:
+    else:
         return dump_and_response("Proxy account not existed")
 
 """
@@ -186,10 +186,10 @@ def proxy_account_balance_check(request): #已测试1
     if request.method == "POST":
         return dump_and_response("Error, bad request method POST")
     proxy_username = request.GET['proxy_username']
-    try:
-        user = get_proxy_account(username=proxy_username)
+    user = get_proxy_account(username=proxy_username)
+    if user:
         return dump_and_response(str(user[1].balance))
-    except User.DoesNotExist:
+    else:
         return dump_and_response("Proxy account not existed")
 
 """
@@ -206,7 +206,7 @@ proxy_new_password 新密码
 "Error,bad request method POST" 错误的请求模式
 """
 
-def admin_proxy_account_change_password(request): #测试
+def admin_proxy_account_change_password(request): #测试1
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
     admin_code = request.GET["admin_code"]
@@ -245,7 +245,7 @@ XXXXXXXXXXXX 如果成功，将返回15位数的特定密链（这里被称为TO
 
 """
 
-def proxy_account_login(request): #已测试
+def proxy_account_login(request): #已测试1
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
     username = request.GET["proxy_username"]
@@ -279,7 +279,7 @@ proxy_new_password 新的密码
 "Error,bad request method POST" 错误的请求模式
 """
 
-def proxy_account_change_password(request): #已测试
+def proxy_account_change_password(request): #已测试1
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
     username = request.GET["proxy_username"]
@@ -299,7 +299,7 @@ def proxy_account_change_password(request): #已测试
 
 """
 代理设置广告
-
+url: http://127.0.0.1:8000/api/proxy_account_ad_change/?token=d6t7rd8l0j0z4p1&ad=testtest
 参数：
 token 代理客户login函数成功后返回的密链，每个账号都有一个独立的密链，并且每次登陆后都会返回一个新的密链
 ad 需要设置的广告（15字以内）
@@ -308,16 +308,43 @@ ad 需要设置的广告（15字以内）
 "Error, account is Not exsited or token is fail" 如果token错误或账户不存在都返回此警告
 "Error,bad request method POST" 错误的请求模式
 """
-def proxy_account_ad_change(request): #已测试
+def proxy_account_ad_change(request): #已测试1
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
     token = request.GET['token']
     ad = request.GET['ad']
-    try:
-        user = User.objects.get(email = token)
-    except:
+    user = get_proxy_account(TOKEN=token)
+    if not user:
         return dump_and_response("Error, account is Not exsited or token is fail")
-    user.first_name = ad
-    user.save()
+    user[1].ad = ad
+    user[1].save()
     return dump_and_response("success")
+
+
+
+"""
+请求代理全部信息
+url:http://127.0.0.1:8000/api/proxy_info_get/?proxy_username=Kong5
+
+参数：
+proxy_username 用户名
+
+返回值:
+["name","ad","balance"] 成功返回会有以下几个数值，第一名字，第二广告，第三余额。
+"Error, account is Not exsited" 如果账户不存在返回此警告
+"Error,bad request method POST" 错误的请求模式
+"""
+def proxy_info_get(request):
+    if request.method is "POST":
+        return dump_and_response("Error, bad request method POST")
+    username = request.GET['proxy_username']
+    user = get_proxy_account(username=username)
+    if not user:
+        return dump_and_response("Error, account is Not exsited")
+    ad = user[1].ad
+    balance = user[1].balance
+    return dump_and_response([str(username),str(ad),str(balance)])
+
+
+
 
