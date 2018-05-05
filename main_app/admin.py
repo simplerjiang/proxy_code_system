@@ -5,9 +5,9 @@ from django.contrib.auth.models import User
 from main_app.models import Others_info
 
 admin.site.register(Admin_code)
-admin.site.register(Software)
 admin.site.register(Authorization)
 admin.site.register(Time_code)
+admin.site.register(Software)
 # Register your models here.
 
 class OtherInfoInline(admin.StackedInline):

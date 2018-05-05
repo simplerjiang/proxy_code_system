@@ -28,4 +28,8 @@ urlpatterns = [
     url(r'^api/admin_proxy_account_change_password',admin_proxy_account_change_password,name='admin_proxy_account_change_password'),
     url(r'^api/proxy_account_ad_change',proxy_account_ad_change,name='proxy_account_ad_change'),
     url(r'^api/proxy_info_get',proxy_info_get,name='proxy_info_get'),
+    url(r'^api/admin_set_software',admin_set_software,name='admin_set_software'),
+    url(r'^api/admin_update_software_version',admin_update_software_version,name='admin_update_software_version'),
+    url(r'^api/admin_update_software_cost',admin_update_software_cost,name='admin_update_software_cost'),
+    url(r'^api/proxy_get_software_code',proxy_get_software_code,name='proxy_get_software_code'),
 ]

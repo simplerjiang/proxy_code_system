@@ -223,6 +223,117 @@ def admin_proxy_account_change_password(request): #测试1
         return dump_and_response("Error, account is Not exsited")
 
 
+"""
+管理员设置软件
+url:http://127.0.0.1:8000/api/admin_set_software/?admin_code=testtest&software_id=1&software_name=%E6%B5%8B%E8%AF%95%E8%BD%AF%E4%BB%B6&software_each_time=720&software_cost=10
+
+参数：
+admin_code 管理员密链
+software_id 软件id（必须是唯一！）
+software_name 软件名字
+software_version_number 软件版本号（选填，不填写就默认为V1.0)
+software_each_time 套餐时间
+software_cost 套餐价格
+
+返回值：
+"success" 成功创建
+"software_id already excited" 软件ID已经存在，请换一个ID
+"Error,admin code wrong!" 管理员密链错误
+"Error,bad request method POST" 错误的请求模式
+"""
+def admin_set_software(request): #已测试
+    if request.method is "POST":
+        return dump_and_response("Error, bad request method POST")
+    admin_code = request.GET["admin_code"]
+    if not admin_code_check(admin_code):
+        return dump_and_response("Error,admin code wrong!")
+    software_id = request.GET['software_id']
+    software_name = request.GET['software_name']
+    try:
+        software_version_number = request.GET['software_version_number']
+    except:
+        software_version_number = "V1.0"
+    software_each_time = request.GET['software_each_time']
+    software_cost = request.GET['software_cost']
+    try:
+        test = Software.objects.get(software_id=software_id)
+        return dump_and_response("software_id already excited")
+    except Software.DoesNotExist:
+        software = Software.objects.create(software_id=int(software_id),software_name=software_name,
+                                           software_version_number=software_version_number,
+                                           software_each_time=int(software_each_time),software_cost=int(software_cost))
+        software.save()
+        return dump_and_response("success")
+
+
+"""
+管理员更新软件版本号
+url: http://127.0.0.1:8000/api/admin_update_software_version/?admin_code=testtest&software_id=1&software_version_number=V1.1
+
+参数：
+admin_code 管理员密链
+software_id 软件ID
+software_version_number 新版本号
+返回值：
+"success" 成功修改
+"software_id do not excited" 软件不存在或软件ID错误
+"Error,admin code wrong!" 管理员密链错误
+"Error,bad request method POST" 错误的请求模式
+"""
+
+def admin_update_software_version(request): #已测试
+    if request.method is "POST":
+        return dump_and_response("Error, bad request method POST")
+    admin_code = request.GET["admin_code"]
+    if not admin_code_check(admin_code):
+        return dump_and_response("Error,admin code wrong!")
+    software_id = request.GET['software_id']
+    software_version_number = request.GET['software_version_number']
+    try:
+        software = Software.objects.get(software_id=software_id)
+    except Software.DoesNotExist:
+        return dump_and_response("software_id do not excited")
+    software.software_version_number = str(software_version_number)
+    software.save()
+    return dump_and_response("success")
+
+"""
+管理员更新软件套餐价格
+url:http://127.0.0.1:8000/api/admin_update_software_cost/?admin_code=testtest&software_id=1&software_each_time=721&software_cost=5
+
+参数：
+admin_code 管理员密链
+software_id 软件ID
+software_each_time 套餐时间
+software_cost 套餐价格
+返回值：
+"success" 设置成功
+"software_id do not excited" 软件不存在或软件ID错误
+"Error,admin code wrong!" 管理员密链错误
+"Error,bad request method POST" 错误的请求模式
+"""
+
+def admin_update_software_cost(request): #已测试
+    if request.method is "POST":
+        return dump_and_response("Error, bad request method POST")
+    admin_code = request.GET["admin_code"]
+    if not admin_code_check(admin_code):
+        return dump_and_response("Error,admin code wrong!")
+    software_id = request.GET['software_id']
+    try:
+        software = Software.objects.get(software_id=software_id)
+    except Software.DoesNotExist:
+        return dump_and_response("software_id do not excited")
+    software_each_time = request.GET['software_each_time']
+    software_cost = request.GET['software_cost']
+    software.software_each_time = software_each_time
+    software.software_cost = software_cost
+    return dump_and_response("success")
+
+
+
+
+
 
 """
 以下为代理可用API
@@ -239,7 +350,7 @@ proxy_username 用户名
 proxy_password 密码
 
 返回值：
-XXXXXXXXXXXX 如果成功，将返回15位数的特定密链（这里被称为TOKEN)
+XXXXXXXXXXXX 如果成功，将返回15位数的特定密链（这里被称为token)
 "Error, account is Not exsited or password is fail" 如果账号密码或账户不存在都返回此警告
 "Error,bad request method POST" 错误的请求模式
 
@@ -345,6 +456,68 @@ def proxy_info_get(request):
     balance = user[1].balance
     return dump_and_response([str(username),str(ad),str(balance)])
 
+"""
+代理提卡
+url:http://127.0.0.1:8000/api/proxy_get_software_code/?token=w5M3r4U6P7t8dU0&HowMuch=3&software_id=1
+
+参数：
+token 代理账户密链
+software_id 软件ID
+HowMuch 提多少张
+
+返回值：
+["n7o7I7M3I4", "r6X7D6O5g1", "c0Z4b3s6F7"] 如果成功，将返回一个列表
+"Error, HowMuch lower than 0" 提卡数量小于或等于0
+"Error, account is Not exsited or token is fail" 如果token错误或账户不存在都返回此警告
+"Error,bad request method POST" 错误的请求模式
+"software_id do not excited" 软件不存在或软件ID错误
+["Balance not enough!","100"] 如果余额不足以提卡，就会返回第一个是提示，第二个是目前的余额
+"""
+
+def proxy_get_software_code(request): #已测试
+    if request.method is "POST":
+        return dump_and_response("Error, bad request method POST")
+    token = request.GET['token']
+    user = get_proxy_account(TOKEN=token)
+    if not user:
+        return dump_and_response("Error, account is Not exsited or token is fail")
+    howmuch = int(request.GET['HowMuch'])
+    if howmuch <= 0:
+        return dump_and_response("Error, HowMuch lower than 0")
+    software_id = request.GET['software_id']
+    try:
+        software = Software.objects.get(software_id=software_id)
+    except Software.DoesNotExist:
+        return dump_and_response("software_id do not excited")
+    count = int(user[1].balance) - (int(software.software_cost)*howmuch)
+    if count < 0:
+        return dump_and_response(["Balance not enough!",user[1].balance])
+    code_list = []
+    for i in range(howmuch):
+        user[1].balance -= int(software.software_cost)
+        user[1].save()
+        code = get_Code(10)
+        code_object = Time_code.objects.create(software=software,
+                                        time=software.software_each_time,
+                                        code=code,
+                                        cost=software.software_cost,
+                                        proxy_man=user[0],
+                                        )
+        code_object.save()
+        code_list.append(code)
+
+    return dump_and_response(code_list)
 
 
+"""
+创建授权（续费授权）
+url:
 
+参数：
+software_code 软件卡密
+customer_QQ  客户QQ，用于保存修改机器人
+bot_QQ 机器人QQ
+
+返回值:
+
+"""

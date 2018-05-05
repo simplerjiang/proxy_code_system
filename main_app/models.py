@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import User
 import random
-
+import django.utils.timezone as timezone
 
 """
 这里使用Django自带的User进行储存代理。
@@ -21,7 +21,6 @@ class Others_info(models.Model):
     balance = models.PositiveIntegerField(verbose_name="用户余额",default=0)
     ad = models.CharField(verbose_name="代理广告",max_length=30)
     TOKEN = models.CharField(verbose_name="API密链",max_length=15,unique=True)
-
 
 
 
@@ -47,16 +46,17 @@ class web_admin(models.Model):
 class Admin_code(models.Model):
     code = models.CharField(verbose_name="API用密链",max_length=50,default=get_TOKEN(15))
 
+    def __str__(self):
+        return self.code+"(此为管理员API密链）"
+
 class Software(models.Model):
     software_id = models.PositiveIntegerField(verbose_name="软件ID", unique=True)
     software_name = models.CharField(verbose_name="软件名", max_length=30)
-    software_version_number = models.CharField(verbose_name="软件版本号", max_length=30)
-
+    software_version_number = models.CharField(verbose_name="软件版本号", max_length=30,default="V1.0")
+    software_each_time = models.PositiveIntegerField(verbose_name="套餐时间（按小时计算）",default=720)
+    software_cost = models.PositiveIntegerField(verbose_name="套餐价格",default=10)
     def __str__(self):
         return self.software_name
-
-    def return_id(self):
-        return self.software_id
 
 
 class Authorization(models.Model):
@@ -65,7 +65,7 @@ class Authorization(models.Model):
     proxy_man = models.ForeignKey(User,verbose_name="代理")
     bot_QQ = models.PositiveIntegerField("机器人的QQ")
     begin_time = models.DateField(verbose_name="创建时间",auto_now_add=True)
-    deadline_time = models.DateField(verbose_name="到期时间",auto_now_add=True)
+    deadline_time = models.DateField(verbose_name="到期时间",default=timezone.now)
 
 
 class Time_code(models.Model):
@@ -77,4 +77,21 @@ class Time_code(models.Model):
     used = models.BooleanField(verbose_name="是否使用过",default=False)
 
 
+    def __str__(self):
+        return "卡密："+ self.code +"--是否使用："+ str(self.used)+"----请尽量不要用管理员网页创建或使用授权码！"
+
+
+def get_Code(num=15): #获取随机TOKEN，通过传入位数。
+    while 1:
+        a = "1234567890"
+        b = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        sa = []
+        for i in range(num//2):
+            sa.append(random.choice(b))
+            sa.append(random.choice(a))
+        sa = "".join(sa)
+        try:
+            Time_code.objects.get(code=sa)
+        except Time_code.DoesNotExist:
+            return sa
 
