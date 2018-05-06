@@ -32,4 +32,7 @@ urlpatterns = [
     url(r'^api/admin_update_software_version',admin_update_software_version,name='admin_update_software_version'),
     url(r'^api/admin_update_software_cost',admin_update_software_cost,name='admin_update_software_cost'),
     url(r'^api/proxy_get_software_code',proxy_get_software_code,name='proxy_get_software_code'),
+    url(r'^api/authorization_make',authorization_make,name='authorization_make'),
+    url(r'^api/authorization_check',authorization_check,name='authorization_check'),
+    url(r'^api/authorization_change',authorization_change,name='authorization_change'),
 ]

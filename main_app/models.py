@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import User
 import random
-import django.utils.timezone as timezone
+import datetime
 
 """
 这里使用Django自带的User进行储存代理。
@@ -65,7 +65,7 @@ class Authorization(models.Model):
     proxy_man = models.ForeignKey(User,verbose_name="代理")
     bot_QQ = models.PositiveIntegerField("机器人的QQ")
     begin_time = models.DateField(verbose_name="创建时间",auto_now_add=True)
-    deadline_time = models.DateField(verbose_name="到期时间",default=timezone.now)
+    deadline_time = models.DateTimeField(verbose_name="到期时间",default=datetime.datetime.now())
 
 
 class Time_code(models.Model):

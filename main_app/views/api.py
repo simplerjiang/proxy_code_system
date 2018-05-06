@@ -10,6 +10,8 @@ from django.http import HttpResponse,HttpResponseRedirect #HttpResponseRedirect�
 from main_app.models import *
 from django.contrib.auth.models import User
 import json
+from .time_deal import *
+import django.utils.timezone as timezone
 
 def dump_and_response(data): #checked
     return HttpResponse(json.dumps(data), content_type="application/json")
@@ -35,12 +37,6 @@ def get_proxy_account(TOKEN=None,username=None):
             return False
 
 
-def api_test(request):
-    try:
-        test = Admin_code.objects.get(code = request.GET["admin_code"])
-        return dump_and_response(test.code)
-    except Admin_code.DoesNotExist:
-        return dump_and_response(["error","reson"])
 """
 以下是管理员API
 """
@@ -511,7 +507,7 @@ def proxy_get_software_code(request): #已测试
 
 """
 创建授权（续费授权）
-url:
+url:http://127.0.0.1:8000/api/authorization_make/?software_code=R4I0Z9r0h5&customer_QQ=123123&bot_QQ=123123
 
 参数：
 software_code 软件卡密
@@ -519,5 +515,102 @@ customer_QQ  客户QQ，用于保存修改机器人
 bot_QQ 机器人QQ
 
 返回值:
+["success","2018-05-06 15:01:35"] 如果成功，第二个值会为到期时间
+"Code Fail" 卡密错误
+"Error,bad request method POST" 错误的请求模式
+"Code already used" 卡密已经被使用过了
+"""
+def authorization_make(request): #已测试
+    if request.method is "POST":
+        return dump_and_response("Error, bad request method POST")
+    software_code = request.GET['software_code']
+    try:
+        code_object = Time_code.objects.get(code=software_code)
+    except:
+        return dump_and_response("Code Fail")
+    if code_object.used == True:
+        return dump_and_response("Code already used")
+    customer_QQ = int(request.GET['customer_QQ'])
+    software = code_object.software
+    time_long = code_object.time
+    try:
+        authorization = Authorization.objects.get(software=software,customer_QQ=customer_QQ)
+        if authorization.deadline_time < timezone.now():
+            authorization.deadline_time = datetime.datetime.now()
+            authorization.save()
+        authorization.deadline_time = authorization.deadline_time + datetime.timedelta(hours=time_long)
+        authorization.save()
+        code_object.used = True
+        code_object.save()
+        return dump_and_response(["success",convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S")])
+    except Authorization.DoesNotExist: #如果授权不存在，新创立
+        authorization = Authorization.objects.create(software=software,
+                                                     customer_QQ=customer_QQ,
+                                                     proxy_man=code_object.proxy_man,
+                                                     bot_QQ=int(request.GET['bot_QQ']),
+                                                     )
+        authorization.save()
+        authorization.deadline_time = authorization.deadline_time + datetime.timedelta(hours=time_long)
+        authorization.save()
+        code_object.used = True
+        code_object.save()
+        return dump_and_response(["success", convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S")])
 
 """
+授权查询
+url:http://127.0.0.1:8000/api/authorization_check/?software_id=1&bot_QQ=123123
+
+参数：
+software_id 软件id
+bot_QQ 机器人QQ
+
+返回值：
+["success","2018-05-06 15:01:35","测试广告"] 如果成功，第二个值会为到期时间，第三个是代理商的广告
+"Fail" 已过期或不存在
+"Error,bad request method POST" 错误的请求模式
+"""
+def authorization_check(request): #已测试
+    if request.method is "POST":
+        return dump_and_response("Error, bad request method POST")
+    software_id = request.GET['software_id']
+    bot_QQ = request.GET['bot_QQ']
+    try:
+        authorization = Authorization.objects.get(software_id=software_id,bot_QQ=bot_QQ)
+    except Authorization.DoesNotExist:
+        return dump_and_response("Fail")
+    if authorization.deadline_time < timezone.now():
+        return dump_and_response('Fail')
+    else:
+        proxy_man_others_info = Others_info.objects.get(user=authorization.proxy_man)
+        return dump_and_response(["success",convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S"),proxy_man_others_info.ad])
+
+"""
+更换授权机器人QQ
+url:http://127.0.0.1:8000/api/authorization_change/?software_id=1&new_bot_QQ=1414&customer_QQ=123123
+
+参数：
+software_id 软件id
+new_bot_QQ 新机器人QQ
+customer_QQ 客户QQ 
+
+返回值：
+["success","1414"] 如果修改成功，第二个返回目前的机器人QQ
+"Error,bad request method POST" 错误的请求模式
+"Fail" 授权不存在或过期
+"""
+def authorization_change(request): #已测试
+    if request.method is "POST":
+        return dump_and_response("Error, bad request method POST")
+    software_id = request.GET['software_id']
+    new_bot_QQ = request.GET['new_bot_QQ']
+    customer_QQ = request.GET['customer_QQ']
+    try:
+        authorization = Authorization.objects.get(software_id=software_id,customer_QQ=customer_QQ)
+    except Authorization.DoesNotExist:
+        return dump_and_response("Fail")
+    if authorization.deadline_time < timezone.now():
+        return dump_and_response('Fail')
+    authorization.bot_QQ = new_bot_QQ
+    authorization.save()
+    return dump_and_response(["success",authorization.bot_QQ])
+

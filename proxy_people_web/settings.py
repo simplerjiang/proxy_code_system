@@ -25,7 +25,6 @@ SECRET_KEY = 'mu9$2i!e2!(5f__(5s$i&uodi2dgd1p#r29bd6u(ymu$d25nb6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -82,13 +81,17 @@ DATABASES = {
     }
 }
 
+ALLOWED_HOSTS = ["127.0.0.1"]
+#请将127.0.0.1替换为你的域名或IP，例子 ['kongsites.com']
+ABSOLUTE_URL = '127.0.0.1'
+#请将127.0.0.1替换为你的域名或IP，例子 'kongsites.com'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
