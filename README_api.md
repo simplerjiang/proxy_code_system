@@ -212,3 +212,47 @@ HowMuch 提多少张
 
 ---
 
+## 创建授权（续费授权）
+url:http://127.0.0.1:8000/api/authorization_make/?software_code=R4I0Z9r0h5&customer_QQ=123123&bot_QQ=123123
+
+#### 参数：
+software_code 软件卡密
+customer_QQ  客户QQ，用于保存修改机器人
+bot_QQ 机器人QQ
+
+#### 返回值:
+["success","2018-05-06 15:01:35"] 如果成功，第二个值会为到期时间
+"Code Fail" 卡密错误
+"Error,bad request method POST" 错误的请求模式
+"Code already used" 卡密已经被使用过了
+
+---
+
+## 授权查询
+url:http://127.0.0.1:8000/api/authorization_check/?software_id=1&bot_QQ=123123
+
+#### 参数：
+software_id 软件id
+bot_QQ 机器人QQ
+
+#### 返回值：
+["success","2018-05-06 15:01:35","测试广告"] 	如果成功，第二个值会为到期时间，第三个是代理商的广告
+"Fail" 已过期或不存在
+"Error,bad request method POST" 错误的请求模式
+
+---
+
+## 更换授权机器人QQ
+url:http://127.0.0.1:8000/api/authorization_change/?software_id=1&new_bot_QQ=1414&customer_QQ=123123
+
+#### 参数：
+software_id 软件id
+new_bot_QQ 新机器人QQ
+customer_QQ 客户QQ 
+
+#### 返回值：
+["success","1414"] 如果修改成功，第二个返回目前的机器人QQ
+"Error,bad request method POST" 错误的请求模式
+"Fail" 授权不存在或过期
+
+---
