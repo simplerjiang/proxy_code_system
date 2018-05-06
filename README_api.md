@@ -4,9 +4,13 @@ url:http://127.0.0.1:8000/api/admin_proxy_account_add_api/?admin_code=testtest&p
 
 #### 参数:
 admin_code = 管理员代码
+
 proxy_username = 代理账户名
+
 proxy_password = 代理密码
+
 proxy_ad = 代理广告（不写就是为空字符串)
+
 proxy_balance = 代理账户金额（不写默认为0)
 
 #### 返回值： (全部json格式）
@@ -203,7 +207,9 @@ HowMuch 提多少张
 
 #### 返回值：
 ["n7o7I7M3I4", "r6X7D6O5g1", "c0Z4b3s6F7"] 如果成功，将返回一个列表
+
 "Error, HowMuch lower than 0" 提卡数量小于或等于0
+
 "Error, account is Not exsited or token is fail" 如果token错误或账户不存在都返回此警告
 "Error,bad request method POST" 错误的请求模式
 "software_id do not excited" 软件不存在或软件ID错误
