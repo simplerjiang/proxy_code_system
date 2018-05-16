@@ -80,6 +80,18 @@ class Time_code(models.Model):
     def __str__(self):
         return "卡密："+ self.code +"--是否使用："+ str(self.used)+"----请尽量不要用管理员网页创建或使用授权码！"
 
+class Notice(models.Model):
+    admin_object = models.ForeignKey(User,verbose_name="管理员")
+    time = models.DateField(verbose_name="创建时间",auto_now_add=True)
+    title = models.CharField(verbose_name="标题",max_length=30)
+    word = models.CharField(verbose_name="内容",max_length=1024)
+
+class Question(models.Model):
+    user_object = models.ForeignKey(User,verbose_name="用户")
+    question_word = models.CharField(verbose_name="工单内容",max_length=1024)
+    time = models.DateField(verbose_name="创建时间",auto_now_add=True)
+    state = models.BooleanField(verbose_name="工单状态",default=True) #工单关闭代表管理员已经检查过。
+
 
 def get_Code(num=15): #获取随机TOKEN，通过传入位数。
     while 1:

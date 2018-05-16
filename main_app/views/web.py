@@ -15,3 +15,5 @@ def api_test(request):
     local_time = convert_timezone(time_objects)
     auth_objects.save()
     return HttpResponse(local_time.strftime("%Y-%m-%d %H:%M:%S"))
+
+
