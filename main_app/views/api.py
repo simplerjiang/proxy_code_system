@@ -261,6 +261,32 @@ def admin_set_software(request): #已测试
         software.save()
         return dump_and_response("success")
 
+"""
+获取所有软件信息
+url:http://127.0.0.1:8000/api/get_all_software/
+
+参数:
+无
+返回值：
+[[1, "\u6d4b\u8bd5\u8f6f\u4ef6", "V1.1", 720, 10, false], [2, "\u6d4b\u8bd5\u8f6f\u4ef62", "V1.0", 720, 10, false], [3, "\u6d4b\u8bd5\u8f6f\u4ef63", "V1.2", 720, 10, false], [4, "\u6d4b\u8bd5\u8f6f\u4ef64", "BetaV0.3", 720, 1, true]]
+[[软件id,软件名,软件版本号,套餐时间,套餐价格,是否试用],[软件id,软件名,软件版本号,套餐时间,套餐价格,是否试用]]
+
+
+
+"""
+def get_all_software(request):
+    if request.method is "POST":
+        return dump_and_response("Error, bad request method POST")
+    all_software = Software.objects.all()
+    all_software_list = []
+    for i in all_software:
+        a = [i.software_id,i.software_name,i.software_version_number,i.software_each_time,i.software_cost,i.software_try]
+        all_software_list.append(a)
+
+    return dump_and_response(all_software_list)
+
+
+
 
 """
 管理员更新软件版本号

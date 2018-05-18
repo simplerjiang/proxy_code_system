@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block wrapper %}
+        <div class="page-wrapper">
+            <!-- Bread crumb -->
+            <div class="row page-titles">
+                <div class="col-md-5 align-self-center">
+                    <h3 class="text-primary">控制台</h3> </div>
+                <div class="col-md-7 align-self-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url "index" %}">主页</a></li>
+                        <li class="breadcrumb-item active">代理后台</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- End Bread crumb -->
+            <!-- Container fluid  -->
+            <div class="container-fluid">
+                <!-- Start Page Content -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card p-30">
+                            <div class="media">
+                                <div class="media-left meida media-middle">
+                                    <span><i class="fa fa-usd f-s-40 color-primary"></i></span>
+                                </div>
+                                <div class="media-body media-text-right">
+                                    <h2>{{ money }}</h2>
+                                    <p class="m-b-0">我的余额</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card p-30">
+                            <div class="media">
+                                <div class="media-left meida media-middle">
+                                    <span><i class="fa fa-shopping-cart f-s-40 color-success"></i></span>
+                                </div>
+                                <div class="media-body media-text-right">
+                                    <h2>{{ auths_num }}</h2>
+                                    <p class="m-b-0">已售授权</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card p-30">
+                            <div class="media">
+                                <div class="media-left meida media-middle">
+                                    <span><i class="fa fa-archive f-s-40 color-warning"></i></span>
+                                </div>
+                                <div class="media-body media-text-right">
+                                    <h2>{{ software_num }}</h2>
+                                    <p class="m-b-0">插件种类</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card p-30">
+                            <div class="media">
+                                <div class="media-left meida media-middle">
+                                    <span><i class="fa fa-user f-s-40 color-danger"></i></span>
+                                </div>
+                                <div class="media-body media-text-right">
+                                    <h2>{{ proxy_man_num }}</h2>
+                                    <p class="m-b-0">平台用户</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+					<div class="col-lg-3">
+                        <div class="card bg-dark">
+                            <div class="testimonial-widget-one p-17">
+                                <div class="testimonial-widget-one owl-carousel owl-theme">
+
+                                    {% if notices_list %}
+                                        {% for i in notices_list %}
+                                            <div class="item">
+                                                <div class="testimonial-content">
+                                                    <img class="testimonial-author-img" src="{% static "images/avatar/2.jpg"%}" alt="" />
+                                                    <div class="testimonial-author">{{ i.title }} -- 管理员：{{ i.admin_name }}</div>
+                                                    <div class="testimonial-author-position">{{ i.time }}</div>
+
+                                                    <div class="testimonial-text">
+                                                        <i class="fa fa-quote-left"></i>  {{ i.word }}
+                                                        <i class="fa fa-quote-right"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% else %}
+                                    <div class="item">
+                                        <div class="testimonial-content">
+                                            <img class="testimonial-author-img" src="{% static "images/avatar/2.jpg"%}" alt="" />
+                                            <div class="testimonial-author">管理员</div>
+                                            <div class="testimonial-author-position">暂无公告</div>
+
+                                            <div class="testimonial-text">
+                                                <i class="fa fa-quote-left"></i> 欢迎来到代理管理后台！如果你是管理员，请到管理员后台添加公告！每次显示最近三条公告
+                                                <i class="fa fa-quote-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9">
+                        <div class="card">
+                            <div class="card-title">
+                                <h4>我的授权 </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>插件名</th>
+                                                <th>客户QQ</th>
+                                                <th>开始时间</th>
+                                                <th>状态</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% if auths_list %}
+                                            {% for a in auths_list %}
+                                            <tr>
+                                                <td>
+                                                    <div class="round-img">
+                                                        <a href=""><img src="{% static "images/avatar/4.jpg"%}" alt=""></a>
+                                                    </div>
+                                                </td>
+                                                <td>{{ a.auths_software }}</td>
+                                                <td><span>{{ a.auths_cust }}</span></td>
+                                                <td><span>{{ a.auths_begin_time }}</span></td>
+                                                {% if a.auths_state %}
+                                                    <td><span class="badge badge-success">未到期</span></td>
+                                                {% else %}
+                                                    <td><span class="badge badge-warning">已到期</span></td>
+                                                {% endif %}
+                                            </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td>
+                                                    <div class="round-img">
+                                                        <a href=""><img src="{% static "images/avatar/4.jpg"%}" alt=""></a>
+                                                    </div>
+                                                </td>
+                                                <td>暂无任何授权</td>
+                                                <td><span>暂无任何授权</span></td>
+                                                <td><span>暂无任何授权</span></td>
+                                                <td><span class="badge badge-warning">暂无</span></td>
+                                            </tr>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- End PAge Content -->
+            </div>
+            <!-- End Container fluid  -->
+            <!-- footer -->
+{% endblock wrapper %}

@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block wrapper %}
+        <!-- Page wrapper  -->
+        <div class="page-wrapper">
+            <!-- Bread crumb -->
+            <div class="row page-titles">
+                <div class="col-md-5 align-self-center">
+                    <h3 class="text-primary">插件卡密购买</h3> </div>
+                <div class="col-md-7 align-self-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url "index" %}">主页</a></li>
+                        <li class="breadcrumb-item"><a href="">插件商店</a></li>
+                        <li class="breadcrumb-item active">插件商店</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- End Bread crumb -->
+            <!-- Container fluid  -->
+            <div class="container-fluid">
+                <!-- Start Page Content -->
+                <!-- /# row -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-title">
+                                <h4>{{ software.software_name }} -- 购买</h4>
+
+                            </div>
+                            <div class="card-body">
+                                <div class="basic-elements">
+                                    <form action="{% url "buy_items" %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>插件名字</label>
+                                                    <input class="form-control" type="text" value="{{ software.software_name }}" disabled="disabled">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>版本号</label>
+                                                    <input class="form-control" type="text" value="{{ software.software_version_number }}" disabled="disabled">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>套餐时间</label>
+                                                    <input class="form-control" type="text" value="{{ software.software_each_time }}" disabled="disabled">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>套餐价格</label>
+                                                    <input class="form-control" type="text" value="{{ software.software_cost }}" disabled="disabled">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label>软件ID</label>
+                                                    <input class="form-control" type="text" value="{{ software.software_id }}" readonly="readonly" name="sid">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>账户余额：{{ money }}</label>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>提取个数</label>
+                                                    <select class="form-control" name="num">
+															<option value="1">1</option>
+															<option value="2">2</option>
+															<option value="3">3</option>
+															<option value="4">4</option>
+															<option value="5">5</option>
+															<option value="6">6</option>
+															<option value="7">7</option>
+															<option value="8">8</option>
+															<option value="9">9</option>
+															<option value="10">10</option>
+															<option value="11">11</option>
+															<option value="12">12</option>
+															<option value="13">13</option>
+															<option value="14">14</option>
+															<option value="15">15</option>
+                                                    </select>
+                                                    <span class="help-block">
+														<small>请小心选择！提卡后可能不予以退款！</small>
+													</span>
+                                                </div>
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary btn-block m-b-10">点击购买</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /# column -->
+                </div>
+                <!-- /# row -->
+
+                <!-- End PAge Content -->
+            </div>
+            <!-- End Container fluid  -->
+{% endblock wrapper %}

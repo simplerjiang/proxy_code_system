@@ -8,6 +8,9 @@ admin.site.register(Admin_code)
 admin.site.register(Authorization)
 admin.site.register(Time_code)
 admin.site.register(Software)
+admin.site.register(Notice)
+admin.site.register(Question)
+admin.site.register(Deal_record)
 # Register your models here.
 
 class OtherInfoInline(admin.StackedInline):
