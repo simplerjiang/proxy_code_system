@@ -127,6 +127,53 @@ def check_all_deal(request):
     return render(request,"page-deal.html",context)
 
 
+@login_required
+def profile_setting(request):
+    if request.method == 'GET':
+        others_info = Others_info.objects.get(user=request.user)
+        context = {"others_info":others_info}
+        return render(request,"profile.html",context)
+    elif request.method == 'POST':
+        opw = request.POST['opw']
+        pw = request.POST['pw']
+        pwa = request.POST['pwa']
+        qq = request.POST['qq']
+        ad = request.POST['ad']
+        if request.user.email != qq:
+            request.user.email = qq
+            request.user.save()
+            context = {"success": "修改成功！"}
+        others_info = Others_info.objects.get(user=request.user)
+        if others_info.ad != ad:
+            others_info.ad = ad
+            others_info.save()
+            context = {"success":"修改成功！"}
+        try:
+            context["others_info"] = others_info
+        except:
+            context = {"others_info": others_info}
+        if opw != '' and pw != '' and pwa != '':
+            user = authenticate(username=request.user.username, password=opw)
+            if user != None:
+                if user.is_active:
+                    if pw == pwa:
+                        user.set_password(pw)
+                        user.save()
+                        context['success'] = "修改成功！"
+                        return redirect("login")
+                    else:
+                        context['warn'] = "新密码输入两次错误！请重试"
+                        return render(request,'profile.html',context)
+                else:
+                    context['warn'] = "密码输入错误！请重试！"
+                    return render(request,'profile.html',context)
+            else:
+                context['warn'] = "密码输入错误！请重试！"
+                return render(request, 'profile.html', context)
+        else:
+            return render(request, 'profile.html', context)
+
+
 
 
 

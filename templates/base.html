@@ -205,7 +205,7 @@
                                     <li><a href="#"><i class="ti-user"></i> 用户：{{ user.username }}</a></li>
                                     <li><a href="#"><i class="ti-wallet"></i> 余额</a></li>
                                     <li><a href="#"><i class="ti-email"></i> 消息</a></li>
-                                    <li><a href="#"><i class="ti-settings"></i> 设置</a></li>
+                                    <li><a href="{% url "profile_setting" %}"><i class="ti-settings"></i> 设置</a></li>
                                     <li><a href="{% url "logout" %}"><i class="fa fa-power-off"></i> 登出</a></li>
                                 </ul>
                             </div>

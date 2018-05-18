@@ -44,5 +44,6 @@ urlpatterns = [
     url(r'^shop/item/(?P<software_id>[0-9]+)/$',shop_detail,name="shop_detail"),
     url(r'^shop/item/buy_items/$',buy_items,name='buy_items'),
     url(r'^shop/check_deal/(?P<deal_code>[0-9]+)/$',check_deal,name="check_deal"),
-    url(r'^shop/check_all_deal/$',check_all_deal,name='check_all_deal')
+    url(r'^shop/check_all_deal/$',check_all_deal,name='check_all_deal'),
+    url(r'^profile_setting/$',profile_setting,name='profile_setting'),
 ]
