@@ -101,7 +101,7 @@ def buy_items(request):
         user_others_info.save() #保存
 
         #创建交易
-        deal_record = Deal_record.objects.create(deal_code=get_deal_code(),acount=user,money=total_mony,symbol=False,notes=str(software.software_name)+"_数量："+str(num))
+        deal_record = Deal_record.objects.create(deal_code=get_deal_code(),acount=user,money=total_mony,symbol=False,notes="提卡-"+str(software.software_name)+"_数量："+str(num))
         deal_record.save()#保存
 
         #生成卡。
@@ -122,7 +122,8 @@ def check_deal(request,deal_code):
 
 @login_required
 def check_all_deal(request):
-    all_deal = Deal_record.objects.filter(acount=request.user)
+    all_deal = Deal_record.objects.filter(acount=request.user).order_by("time")
+    all_deal = all_deal.reverse()
     context = {"all_deal":all_deal}
     return render(request,"page-deal.html",context)
 
@@ -174,6 +175,53 @@ def profile_setting(request):
             return render(request, 'profile.html', context)
 
 
+@login_required
+def check_all_auth(request):
+    context = {}
+    try:  #查找授权
+        auths = Authorization.objects.filter(proxy_man=request.user).order_by('id')
+        auths_list =[]
+        auths = auths.reverse()
+        for i in auths:
+            a = {"software":i.software,"customer_QQ":i.customer_QQ,"bot_QQ":i.bot_QQ,"begin_time":i.begin_time,"deadline_time":i.deadline_time,"pk":i.pk}
+            auths_list.append(a)
+            if i.deadline_time < timezone.now():
+                a["auths_state"] = False
+            else:
+                a["auths_state"] = True
+        context["auths_list"] = auths_list
+    except:
+        pass
+
+    return render(request,'page-auth.html',context)
+
+@login_required
+def check_auth(request,pk):
+    if request.method == "GET":
+        context = {"pk":pk}
+        try:
+            auth = Authorization.objects.get(pk=pk)
+            if auth.proxy_man != request.user:
+                return Http404("此授权不属于此账户！")
+            context["auth"] = auth
+            return render(request,'auth-detail.html',context=context)
+        except Authorization.DoesNotExist:
+            raise Http404("未找到！错误！")
+    elif request.method == "POST":
+        context ={"pk":pk}
+        try:
+            auth = Authorization.objects.get(pk=pk)
+            if auth.proxy_man != request.user:
+                raise Http404("此授权不属于此账户！")
+            elif str(auth.bot_QQ) != request.POST['qq']:
+                auth.bot_QQ = request.POST['qq']
+                auth.save()
+                context['success'] = "机器人QQ修改成功！"
+
+        except Authorization.DoesNotExist:
+            raise Http404("找不到！错误！")
+        context['auth'] = auth
+        return render(request, 'auth-detail.html', context=context)
 
 
 

@@ -94,6 +94,8 @@ def admin_proxy_account_add_API(request): #已测试1
 代理账户充值
 url:http://127.0.0.1:8000/api/admin_proxy_account_topup/?admin_code=testtest&proxy_username=Kong2&money=30
 
+说明：试用此功能进行充值会生成一个充值订单，显示给代理账户看!所以如果需要充值请用此API进行充值！并且金额不能低于0元
+
 参数：
 admin_code 管理员代码
 proxy_username 代理账号
@@ -104,6 +106,7 @@ money 添加金额
 "Error, admin code wrong"  管理员代码错误
 "Error,bad request method POST" 错误的请求模式
 "Proxy account not existed" 代理账号不存在
+"Error, wrong number!" 充值金额低于0或等于0
 """
 
 def admin_proxy_account_topup(request): #已测试1
@@ -114,19 +117,24 @@ def admin_proxy_account_topup(request): #已测试1
         return dump_and_response("Error, admin code wrong")
     proxy_username = request.GET['proxy_username']
     money = request.GET['money']
+    if int(money)<=0:
+        return dump_and_response("Error, wrong number!")
     user = get_proxy_account(username=proxy_username)
     if user:
         user_balance = user[1].balance
         user_balance = int(user_balance) +int(money)
         user[1].balance = user_balance
         user[1].save()
+        deal_record = Deal_record.objects.create(deal_code=get_deal_code(5),acount=user[0],money=int(money),notes="通过API账户充值，金额："+str(money))
+        deal_record.save()
         return dump_and_response(["Success",user[1].balance])
     else:
         return dump_and_response("Proxy account not existed")
 
 """
 代理账户金额修改
-注意！此API功能用于清零，如果操作不当可能造成严重后果。且输入值必须大于等于0
+注意！此API功能用于清零，如果操作不当可能造成严重后果。且输入值必须大于等于0。
+请不要将此API用于充值！因为此API不会生成充值订单！
 
 url:http://127.0.0.1:8000/api/admin_proxy_account_balance_setup/?admin_code=testtest&proxy_username=Kong2&money=30
 
@@ -514,6 +522,8 @@ def proxy_get_software_code(request): #已测试
     count = int(user[1].balance) - (int(software.software_cost)*howmuch)
     if count < 0:
         return dump_and_response(["Balance not enough!",user[1].balance])
+    deal_record = Deal_record.objects.create(deal_code=get_deal_code(5),acount=user[0],money=int(software.software_cost)*howmuch,symbol=False,notes="提卡—"+str(software.software_name)+"_数量："+str(howmuch))
+    deal_record.save()
     code_list = []
     for i in range(howmuch):
         user[1].balance -= int(software.software_cost)
@@ -524,6 +534,7 @@ def proxy_get_software_code(request): #已测试
                                         code=code,
                                         cost=software.software_cost,
                                         proxy_man=user[0],
+                                        deal_object=deal_record,
                                         )
         code_object.save()
         code_list.append(code)

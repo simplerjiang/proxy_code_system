@@ -29,6 +29,7 @@ proxy_balance = 代理账户金额（不写默认为0)
 
 url:http://127.0.0.1:8000/api/admin_proxy_account_topup/?admin_code=testtest&proxy_username=测试账号1&money=30
 
+** 说明：试用此功能进行充值会生成一个充值订单，显示给代理账户看!所以如果需要充值请用此API进行充值！并且金额不能低于0元 **
 
 #### 参数：
 
@@ -53,6 +54,8 @@ money 添加金额
 ## 代理账户金额修改
 
 注意！此API功能用于清零，如果操作不当可能造成严重后果。且输入值必须大于等于0
+
+** 请不要将此API用于充值！因为此API不会生成充值订单！**
 
 url:http://127.0.0.1:8000/api/admin_proxy_account_balance_setup/?admin_code=testtest&proxy_username=测试账号1&money=30
 

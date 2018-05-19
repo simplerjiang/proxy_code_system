@@ -228,16 +228,15 @@
                         <li class="nav-label">功能</li>
                         <li> <a class="has-arrow  " href="#" aria-expanded="false"><i class="fa fa-envelope"></i><span class="hide-menu">工单系统</span></a>
                             <ul aria-expanded="false" class="collapse">
-                                <li><a href="email-compose.html">提交工单</a></li>
-                                <li><a href="email-read.html">我的工单</a></li>
+                                <li><a href="">提交工单</a></li>
+                                <li><a href="">我的工单</a></li>
                             </ul>
                         </li>
                         <li> <a class="has-arrow  " href="#" aria-expanded="false"><i class="fa fa-suitcase"></i><span class="hide-menu">授权系统</span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="{% url "shop" %}">购买授权 </a></li>
                                 <li><a href="{% url "check_all_deal" %}">查看订单 </a></li>
-                                <li><a href="chart-morris.html">使用卡密 </a></li>
-                                <li><a href="chart-chartjs.html">管理授权 </a></li>
+                                <li><a href="{% url "check_all_auth" %}">管理授权 </a></li>
                             </ul>
                         </li>
                     </ul>
