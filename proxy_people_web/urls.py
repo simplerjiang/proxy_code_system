@@ -13,9 +13,11 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-from django.conf.urls import include, url
+from django.conf.urls import include, url,patterns
 from django.contrib import admin
 from main_app.views import *
+from django.conf.urls.static import static
+from django.conf import settings
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^web_test/$',web_test,name="api_test"),
@@ -48,4 +50,9 @@ urlpatterns = [
     url(r'^profile_setting/$',profile_setting,name='profile_setting'),
     url(r'^check_all_auth/$',check_all_auth,name='check_all_auth'),
     url(r'^check_auth/(?P<pk>[0-9]+)/$',check_auth,name='check_auth'),
-]
+]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+ static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)
+
+urlpatterns +=patterns('',
+                        url(r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.STATIC_ROOT}),
+                        url(r'^static/<?P<path>.*>$','django.views.static.serve',{'document_root':settings.MEDIA_ROOT}),
+                       )
