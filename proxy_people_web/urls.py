@@ -50,7 +50,7 @@ urlpatterns = [
     url(r'^profile_setting/$',profile_setting,name='profile_setting'),
     url(r'^check_all_auth/$',check_all_auth,name='check_all_auth'),
     url(r'^check_auth/(?P<pk>[0-9]+)/$',check_auth,name='check_auth'),
-]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)+ static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)
+]
 
 urlpatterns +=patterns('',
                         url(r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.STATIC_ROOT}),
