@@ -32,6 +32,7 @@
 
 <body class="fix-header fix-sidebar">
     <!-- Preloader - style you can find in spinners.css -->
+
     <!-- Main wrapper  -->
     <div id="main-wrapper">
         <!-- header header  -->
@@ -198,9 +199,10 @@
                             <a class="nav-link dropdown-toggle text-muted  " href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{% static "images/users/5.jpg"%}" alt="user" class="profile-pic" /></a>
                             <div class="dropdown-menu dropdown-menu-right animated zoomIn">
                                 <ul class="dropdown-user">
-                                    <li><a href="#"><i class="ti-user"></i> 用户：{{ user.username }}</a></li>
-                                    <li><a href="#"><i class="ti-wallet"></i> 余额</a></li>
-                                    <li><a href="#"><i class="ti-email"></i> 消息</a></li>
+                                    <li><a href="{% url "index" %}"><i class="ti-user"></i> 用户：{{ user.username }}</a></li>
+                                    <li><a href="{% url "shop" %}"><i class="ti-wallet"></i> 购买授权</a></li>
+                                    <li><a href="{% url "check_all_deal" %}"><i class="ti-email"></i> 查看订单</a></li>
+                                    <li><a href="{% url "check_all_auth" %}"><i class="ti-wallet"></i> 管理授权</a></li>
                                     <li><a href="{% url "profile_setting" %}"><i class="ti-settings"></i> 设置</a></li>
                                     <li><a href="{% url "logout" %}"><i class="fa fa-power-off"></i> 登出</a></li>
                                 </ul>
@@ -222,17 +224,17 @@
                         <li class="nav-label">主页与控制台</li>
                         <li> <a class="has-arrow  " href="{% url "index" %}" aria-expanded="false"><i class="fa fa-tachometer"></i><span class="hide-menu">控制台</span></a></li>
                         <li class="nav-label">功能</li>
-                        <li> <a class="has-arrow  " href="#" aria-expanded="false"><i class="fa fa-envelope"></i><span class="hide-menu">工单系统</span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li><a href="">提交工单</a></li>
-                                <li><a href="">我的工单</a></li>
-                            </ul>
-                        </li>
                         <li> <a class="has-arrow  " href="#" aria-expanded="false"><i class="fa fa-suitcase"></i><span class="hide-menu">授权系统</span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="{% url "shop" %}">购买授权 </a></li>
                                 <li><a href="{% url "check_all_deal" %}">查看订单 </a></li>
                                 <li><a href="{% url "check_all_auth" %}">管理授权 </a></li>
+                            </ul>
+                        </li>
+                        <li> <a class="has-arrow  " href="#" aria-expanded="false"><i class="fa fa-suitcase"></i><span class="hide-menu">工单系统</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="#">提交工单 </a></li>
+                                <li><a href="#">查看工单 </a></li>
                             </ul>
                         </li>
                     </ul>
