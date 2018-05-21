@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse #用来进行命名空间的反调用
 from django.contrib.auth import authenticate, login,logout
-from django.http import HttpResponse,HttpResponseRedirect,Http404 #HttpResponseRedirect是用于进行url进行跳转
+from django.http import HttpResponse,HttpResponseRedirect #HttpResponseRedirect是用于进行url进行跳转
 from main_app.models import *
 from datetime import date,timedelta
 from .time_deal import *
@@ -42,15 +42,11 @@ def reg(request):
         password = request.POST['pw']
         passwordagain = request.POST['pwa']
         qq = request.POST['qq']
-        try:
-            qq = int(qq)
-        except:
-            return render(request, 'page-register.html', context={"warn": "请输入正确QQ号！"})
         if password != passwordagain:
-            return render(request,'page-register.html',context={"warn":"密码两次输入错误！"})
+            return render(request,'page-register.html',context={"warn":"密码两次输入错误"})
         try:
             User.objects.get(username=username)
-            return render(request,"page-register.html",context={"warn":"用户名已存在！"})
+            return render(request,"page-register.html",context={"warn":"用户名已存在"})
         except User.DoesNotExist:
             user = User.objects.create_user(username=username,email=qq,password=password)
             others_info = Others_info.objects.create(user=user)
