@@ -12,9 +12,24 @@ from django.contrib.auth.models import User
 import json
 from .time_deal import *
 import django.utils.timezone as timezone
+import random
 
 def dump_and_response(data): #checked
     return HttpResponse(json.dumps(data), content_type="application/json")
+
+def get_TOKEN(num=15): #获取随机TOKEN，通过传入位数。
+    while 1:
+        a = "1234567890"
+        b = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        sa = []
+        for i in range(num//2):
+            sa.append(random.choice(b))
+            sa.append(random.choice(a))
+        sa = "".join(sa)
+        try:
+            Others_info.objects.get(TOKEN=sa)
+        except Others_info.DoesNotExist:
+            return sa
 
 
 """

@@ -5,6 +5,7 @@ from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.auth.models import User
 import random
 import datetime
+from main_app.views import *
 
 """
 这里使用Django自带的User进行储存代理。
@@ -27,27 +28,18 @@ def get1_Code(num=15): #获取随机TOKEN，通过传入位数。
             sa.append(random.choice(a))
         sa = "".join(sa)
         return sa
+
 class Others_info(models.Model):
     user = models.OneToOneField(User)
     balance = models.PositiveIntegerField(verbose_name="用户余额",default=0)
     ad = models.CharField(verbose_name="代理广告",max_length=30,default="")
     TOKEN = models.CharField(verbose_name="API密链",max_length=15,unique=True,default=get1_Code())
+    level = models.PositiveIntegerField(verbose_name="级别",default=1)
+    up_proxy = models.PositiveIntegerField(verbose_name="上级",null=True)
 
 
 
-def get_TOKEN(num=15): #获取随机TOKEN，通过传入位数。
-    while 1:
-        a = "1234567890"
-        b = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        sa = []
-        for i in range(num//2):
-            sa.append(random.choice(b))
-            sa.append(random.choice(a))
-        sa = "".join(sa)
-        try:
-            Others_info.objects.get(TOKEN=sa)
-        except Others_info.DoesNotExist:
-            return sa
+
 """
 #暂时不需要
 class web_admin(models.Model):
@@ -55,7 +47,7 @@ class web_admin(models.Model):
     admin_password = models.CharField(verbose_name="管理员密码", max_length=30)
 """
 class Admin_code(models.Model):
-    code = models.CharField(verbose_name="API用密链",max_length=50,default=get_TOKEN(15))
+    code = models.CharField(verbose_name="API用密链",max_length=50,default=get1_Code())
 
     def __str__(self):
         return self.code+"(此为管理员API密链）"
