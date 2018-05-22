@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}
+修改授权 -- 软件代理后台
+{% endblock %}
+{% block wrapper %}
+        <!-- Page wrapper  -->
+        <div class="page-wrapper">
+            <!-- Bread crumb -->
+            <div class="row page-titles">
+                <div class="col-md-5 align-self-center">
+                    <h3 class="text-primary">修改授权</h3> </div>
+                <div class="col-md-7 align-self-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url "index" %}">主页</a></li>
+                        <li class="breadcrumb-item"><a href="{% url "check_all_auth" %}">查看授权</a></li>
+                        <li class="breadcrumb-item active">修改授权</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- End Bread crumb -->
+                        <div class="card">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs profile-tab" role="tablist">
+                                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab">修改个人资料</a> </li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="home" role="tabpanel">
+                                    <div class="card-body">
+                                        <form class="form-horizontal form-material" action="{% url "check_auth" pk=pk %}" method="post">
+                                            {% csrf_token %}
+                                            {% if warn %}
+                                            <div class="form-group">
+                                            <div class="alert alert-danger alert-dismissible fade show col-md-12">
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                <strong>警告！</strong> {{ warn }}
+                                            </div>
+                                            </div>
+                                            {% endif %}
+                                            {% if success %}
+                                            <div class="form-group">
+                                            <div class="alert alert-primary alert-dismissible fade show col-md-12">
+                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                                <strong>警告！</strong> {{ success }}
+                                            </div>
+                                            </div>
+                                            {% endif %}
+                                            <div class="form-group">
+                                                <br>
+                                                <label class="col-md-12">软件名字</label>
+                                                <div class="col-md-12">
+                                                    <input type="text" value="{{ auth.software.software_name }}" class="form-control form-control-line" disabled="disabled" >
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="example-email" class="col-md-12">客人QQ</label>
+                                                <div class="col-md-12">
+                                                    <input type="text" value="{{ auth.customer_QQ }}" class="form-control form-control-line" disabled="disabled" >
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-12">机器人QQ</label>
+                                                <div class="col-md-12">
+                                                    <input type="text" value="{{ auth.bot_QQ }}" class="form-control form-control-line" name="qq">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-12">创建时间</label>
+                                                <div class="col-md-12">
+                                                    <input type="text" value="{{ auth.begin_time|date:"Y/m/d" }}" class="form-control form-control-line" disabled="disabled">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-12">到期时间</label>
+                                                <div class="col-md-12">
+                                                    <input type="text" value="{{ auth.deadline_time|date:"Y/m/d H:i" }}"  class="form-control form-control-line" disabled="disabled">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-sm-12">
+                                                    <button class="btn btn-success">更新授权</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!--second tab-->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Column -->
+                </div>
+
+                <!-- End PAge Content -->
+            </div>
+            <!-- End Container fluid  -->
+
+{% endblock wrapper %}
+
+    <!-- End Wrapper -->
+{% block js_more %}
+      <script>
+          $(function(){
+            $("html").niceScroll({
+                cursorcolor:"#16385d",
+                cursorwidth:"5px",
+                background:"#fff",
+                cursorborder:"1px solid #5c4ac7",
+                cursorborderradius:0
+                });  // a world f
+          });
+      </script>
+{% endblock js_more %}

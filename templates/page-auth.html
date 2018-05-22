@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}
+查看所有授权 -- 软件代理后台
+{% endblock %}
+{% block wrapper %}
+<!-- Page wrapper  -->
+        <div class="page-wrapper">
+            <!-- Bread crumb -->
+            <div class="row page-titles">
+                <div class="col-md-5 align-self-center">
+                    <h3 class="text-primary">查看所有授权</h3> </div>
+                <div class="col-md-7 align-self-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url "index" %}">主页</a></li>
+                        <li class="breadcrumb-item active">查看所有授权</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- End Bread crumb -->
+            <!-- Container fluid  -->
+            <div class="container-fluid">
+                <!-- Start Page Content -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">感谢您的消费，请妥善保管好授权信息！</h4>
+                                <h6 class="card-subtitle"><strong>可点击下方按钮，选择不同格式，建议保存在电脑中！</strong></h6>
+                                <div class="table-responsive m-t-40">
+                                    <table id="example23" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>软件名字</th>
+                                                <th>客户的QQ</th>
+                                                <th>机器人的QQ</th>
+                                                <th>创建时间</th>
+                                                <th>到期时间</th>
+                                                <th>是否到期</th>
+                                                <th>点击修改机器人QQ</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>软件名字</th>
+                                                <th>客户的QQ</th>
+                                                <th>机器人的QQ</th>
+                                                <th>创建时间</th>
+                                                <th>到期时间</th>
+                                                <th>是否到期</th>
+                                                <th>点击修改机器人QQ</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody>
+                                        {% if auths_list %}
+                                        {% for i in auths_list %}
+                                            <tr>
+                                                <td>{{ i.software.software_name }}</td>
+                                                <td>{{ i.customer_QQ }}</td>
+                                                <td>{{ i.bot_QQ}}</td>
+                                                <td>{{ i.begin_time|date:"Y/m/d" }}</td>
+                                                <td>{{ i.deadline_time|date:"Y/m/d H:i" }}</td>
+                                                {% if i.auths_state %}
+                                                    <td>正常</td>
+                                                {% else %}
+                                                    <td>到期</td>
+                                                {% endif %}
+                                                <td><a href="{% url "check_auth" pk=i.pk %}">修改机器人QQ</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td>暂无授权信息</td>
+                                                <td>暂无授权信息</td>
+                                                <td>暂无授权信息</td>
+                                                <td>暂无授权信息</td>
+                                                <td>暂无授权信息</td>
+                                                <td>暂无授权信息</td>
+                                            </tr>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End PAge Content -->
+            </div>
+            <!-- End Container fluid  -->
+{% endblock wrapper %}
+{% block js_more %}
+    <script src="{% static "js/lib/datatables/datatables.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/datatables-init.js"%}"></script>
+{% endblock js_more %}

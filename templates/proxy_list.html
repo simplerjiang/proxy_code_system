@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}
+查看我的所有代理 -- 软件代理后台
+{% endblock %}
+{% block wrapper %}
+<!-- Page wrapper  -->
+        <div class="page-wrapper">
+            <!-- Bread crumb -->
+            <div class="row page-titles">
+                <div class="col-md-5 align-self-center">
+                    <h3 class="text-primary">下级代理管理</h3> </div>
+                <div class="col-md-7 align-self-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url "index" %}">主页</a></li>
+                        <li class="breadcrumb-item active">下级代理管理</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- End Bread crumb -->
+            <!-- Container fluid  -->
+            <div class="container-fluid">
+                <!-- Start Page Content -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">感谢您的努力！ 可以在此页面管理您的下级代理</h4>
+                                <h6 class="card-subtitle"><strong>可点击下方按钮，选择不同格式，建议保存在电脑中！</strong></h6>
+                                <div class="table-responsive m-t-40">
+                                    <table id="example23" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>下级代理用户名</th>
+                                                <th>下级代理级别</th>
+                                                <th>下级代理余额</th>
+                                                <th>下级代理QQ</th>
+                                                <th>点击修改密码</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>下级代理用户名</th>
+                                                <th>下级代理级别</th>
+                                                <th>下级代理余额</th>
+                                                <th>下级代理QQ</th>
+                                                <th>点击修改密码</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody>
+                                        {% if all_proxy_list %}
+                                        {% for i in all_proxy_list %}
+                                            <tr>
+                                                <td style="color: #008c86">{{ i.user.username }}</td>
+                                                <td style="color: #008c86">VIP{{ i.level }}</td>
+                                                <td style="color: #008c86">{{ i.balance}}</td>
+                                                <td style="color: #008c86">{{ i.user.email }}</td>
+                                                <td><a href="{% url "change_down_proxy_info" i.user.id %}">点击修改密码</a></td>
+                                            </tr>
+                                        {% endfor %}
+                                        {% else %}
+                                            <tr>
+                                                <td style="color: #008c86">暂无下级代理</td>
+                                                <td style="color: #008c86">暂无下级代理</td>
+                                                <td style="color: #008c86">暂无下级代理</td>
+                                                <td style="color: #008c86">暂无下级代理</td>
+                                                <td><a href="" style="color: #008c86">点击修改密码</a></td>
+                                            </tr>
+                                        {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End PAge Content -->
+            </div>
+            <!-- End Container fluid  -->
+{% endblock wrapper %}
+{% block js_more %}
+    <script src="{% static "js/lib/datatables/datatables.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/datatables-init.js"%}"></script>
+{% endblock js_more %}

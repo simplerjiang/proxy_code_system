@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title %}
+查看订单号:{{ deal_record.deal_code }} -- 软件代理后台
+{% endblock %}
+{% block wrapper %}
+<!-- Page wrapper  -->
+        <div class="page-wrapper">
+            <!-- Bread crumb -->
+            <div class="row page-titles">
+                <div class="col-md-5 align-self-center">
+                    <h3 class="text-primary">卡密提取</h3> </div>
+                <div class="col-md-7 align-self-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url "index" %}">主页</a></li>
+                        <li class="breadcrumb-item active">卡密提取</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- End Bread crumb -->
+            <!-- Container fluid  -->
+            <div class="container-fluid">
+                <!-- Start Page Content -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">感谢您的消费，请收好您的卡密————订单号:{{ deal_record.deal_code }}</h4>
+                                <h6 class="card-subtitle"><strong>可点击下方按钮，选择不同格式，建议保存在电脑中！</strong></h6>
+                                <div class="table-responsive m-t-40">
+                                    <table id="example23" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>软件名字</th>
+                                                <th>卡密</th>
+                                                <th>创卡时间</th>
+                                                <th>购买价格</th>
+                                                <th>套餐时间</th>
+                                                <th>是否使用</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>软件名字</th>
+                                                <th>卡密</th>
+                                                <th>创卡时间</th>
+                                                <th>购买价格</th>
+                                                <th>套餐时间</th>
+                                                <th>是否使用</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody>
+                                        {% for i in codes_list %}
+                                            <tr>
+                                                <td>{{ i.software.software_name }}</td>
+                                                <td>{{ i.code }}</td>
+                                                <td>{{ i.begin_time|date:"Y/m/d H:i"}}</td>
+                                                <td>{{ i.cost }}</td>
+                                                <td>{{ i.time }} 小时</td>
+                                                {% if i.used %}
+                                                    <td>已使用</td>
+                                                {% else %}
+                                                    <td>未使用</td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End PAge Content -->
+            </div>
+            <!-- End Container fluid  -->
+{% endblock wrapper %}
+{% block js_more %}
+    <script src="{% static "js/lib/datatables/datatables.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"%}"></script>
+    <script src="{% static "js/lib/datatables/datatables-init.js"%}"></script>
+{% endblock js_more %}

@@ -1,0 +1,23 @@
+{% extends "error_base.html" %}
+{% load staticfiles %}
+
+{% block Error %}
+<body class="fix-header fix-sidebar">
+    <!-- Preloader - style you can find in spinners.css -->
+    <div class="preloader">
+        <svg class="circular" viewBox="25 25 50 50">
+			<circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
+    </div>
+    <!-- Main wrapper  -->
+    <div class="error-page" id="wrapper">
+        <div class="error-box">
+            <div class="error-body text-center">
+                <h1>{{ error_name }}</h1>
+                <h3 class="text-uppercase">{{ error_name2 }}</h3>
+                <p class="text-muted m-t-30 m-b-30">{{ error_name3 }}</p>
+                <a class="btn btn-info btn-rounded waves-effect waves-light m-b-40" href="{{ link }}">点击返回</a> </div>
+            <footer class="footer text-center">&copy; 2018 Kong.</footer>
+        </div>
+    </div>
+    <!-- End Wrapper -->
+{% endblock Error %}
