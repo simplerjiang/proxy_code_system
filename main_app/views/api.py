@@ -270,6 +270,8 @@ software_name 软件名字
 software_version_number 软件版本号（选填，不填写就默认为V1.0)
 software_each_time 套餐时间
 software_cost 套餐价格
+software_try 是否可以试用（1为可以，0为不可以）
+software_try_hours 如果可以试用，试用的小时（如果不可以，请不用填）
 
 返回值：
 "success" 成功创建
@@ -291,13 +293,24 @@ def admin_set_software(request): #已测试
         software_version_number = "V1.0"
     software_each_time = request.GET['software_each_time']
     software_cost = Decimal(request.GET['software_cost'])
+    software_try = request.GET['software_try']
+    if software_try == "1":
+        software_try = True
+        software_try_hours = int(request.GET['software_try_hours'])
+    else:
+        software_try = False
+        software_try_hours = 0
     try:
         test = Software.objects.get(software_id=software_id)
         return dump_and_response("software_id already excited")
     except Software.DoesNotExist:
         software = Software.objects.create(software_id=int(software_id),software_name=software_name,
                                            software_version_number=software_version_number,
-                                           software_each_time=int(software_each_time),software_cost=int(software_cost))
+                                           software_each_time=int(software_each_time),
+                                           software_cost=int(software_cost),
+                                           software_try = software_try,
+                                           software_try_hours=software_try_hours,
+                                           )
         software.save()
         return dump_and_response("success")
 
@@ -734,6 +747,7 @@ bot_QQ 机器人QQ
 
 返回值：
 ["success","2018-05-06 15:01:35","测试广告"] 如果成功，第二个值会为到期时间，第三个是代理商的广告
+["try_success","2018-05-06 15:01:35"] 如果是试用，则返回此内容，不返回代理广告
 "Fail" 已过期或不存在
 "Error,bad request method POST" 错误的请求模式
 """
@@ -746,7 +760,18 @@ def authorization_check(request): #已测试
         software = Software.objects.get(software_id=int(software_id))
         authorization = Authorization.objects.get(software=software,bot_QQ=int(bot_QQ))
     except:
-        return dump_and_response('Fail')
+        if software.software_try == True:
+            #开始试用。
+            authorization = Authorization.objects.create(software=software,
+                                                         customer_QQ=0,
+                                                         bot_QQ=int(bot_QQ),
+                                                         )
+            authorization.save()
+            authorization.deadline_time = authorization.deadline_time + datetime.timedelta(hours=software.software_try_hours)
+            authorization.save()
+            return dump_and_response(["try_success",convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S")])
+        else:
+            return dump_and_response('Fail')
     if authorization.deadline_time < timezone.now():
         return dump_and_response('Fail')
     else:

@@ -70,6 +70,7 @@ class Software(models.Model):
     software_each_time = models.PositiveIntegerField(verbose_name="套餐时间（按小时计算）",default=720)
     software_cost = models.DecimalField(max_digits=8,decimal_places=2,verbose_name="软件价格",default=0)
     software_try = models.BooleanField(verbose_name="是否开启试用",default=False)
+    software_try_hours = models.PositiveIntegerField(verbose_name="试用时长",default=0)
     def __str__(self):
         return self.software_name+"  软件ID:"+str(self.software_id)
 
@@ -85,10 +86,11 @@ class Deal_record(models.Model):
 class Authorization(models.Model):
     software = models.ForeignKey(Software, verbose_name="软件对象")
     customer_QQ = models.PositiveIntegerField(verbose_name="客户的QQ")
-    proxy_man = models.ForeignKey(User,verbose_name="代理")
+    proxy_man = models.ForeignKey(User,verbose_name="代理",blank=True,null=True)
     bot_QQ = models.PositiveIntegerField("机器人的QQ")
     begin_time = models.DateField(verbose_name="创建时间",auto_now_add=True)
     deadline_time = models.DateTimeField(verbose_name="到期时间",default=timezone.now)
+
 
 
 class Time_code(models.Model):
