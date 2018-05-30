@@ -74,6 +74,8 @@ class Software(models.Model):
     def __str__(self):
         return self.software_name+"  软件ID:"+str(self.software_id)
 
+
+
 class Deal_record(models.Model):
     time = models.DateTimeField(verbose_name="交易时间",auto_now_add=True)
     deal_code = models.CharField(verbose_name="交易编号",max_length=5)

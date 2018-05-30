@@ -77,7 +77,7 @@ up_proxy = 上级代理用户名（不填写就是无）
 "Fail, proxy_level higher than 20!" 代理等级大于20！
 """
 
-def admin_proxy_account_add_API(request): #已测试1
+def admin_proxy_account_add_API(request): #Done
     if request.method == "POST":
         return dump_and_response("Error,bad request method POST")
     admin_code = request.GET['admin_code']
@@ -141,7 +141,7 @@ money 添加金额
 "Error, wrong number!" 充值金额低于0或等于0
 """
 
-def admin_proxy_account_topup(request): #已测试1
+def admin_proxy_account_topup(request): #Done
     if request.method == "POST":
         return dump_and_response("Error,bad request method POST")
     admin_code = request.GET['admin_code']
@@ -184,7 +184,7 @@ money 设置金钱
 "Error, money less than 0" money参数小于0
 """
 
-def admin_proxy_account_balance_setup(request): #已测试1
+def admin_proxy_account_balance_setup(request): #Done
     if request.method == "POST":
         return dump_and_response("Error, bad request method POST")
     admin_code = request.GET['admin_code']
@@ -193,7 +193,7 @@ def admin_proxy_account_balance_setup(request): #已测试1
     proxy_username = request.GET['proxy_username']
     money = request.GET['money']
     try:
-        money = int(money)
+        money = Decimal(money)
     except ValueError:
         return dump_and_response("Error, money type wrong")
     if money < 0:
@@ -202,7 +202,7 @@ def admin_proxy_account_balance_setup(request): #已测试1
     if user:
         user[1].balance = money
         user[1].save()
-        return dump_and_response(["Success",user[1].balance])
+        return dump_and_response(["Success","%.2f" % user[1].balance])
     else:
         return dump_and_response("Proxy account not existed")
 
@@ -218,7 +218,7 @@ proxy_username 代理账号
 "Proxy account not existed" 代理账号不存在
 
 """
-def proxy_account_balance_check(request): #已测试1
+def proxy_account_balance_check(request): #Done
     if request.method == "POST":
         return dump_and_response("Error, bad request method POST")
     proxy_username = request.GET['proxy_username']
@@ -242,7 +242,7 @@ proxy_new_password 新密码
 "Error,bad request method POST" 错误的请求模式
 """
 
-def admin_proxy_account_change_password(request): #测试1
+def admin_proxy_account_change_password(request): #Done
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
     admin_code = request.GET["admin_code"]
@@ -261,7 +261,7 @@ def admin_proxy_account_change_password(request): #测试1
 
 """
 管理员设置软件
-url:http://127.0.0.1:8000/api/admin_set_software/?admin_code=testtest&software_id=1&software_name=%E6%B5%8B%E8%AF%95%E8%BD%AF%E4%BB%B6&software_each_time=720&software_cost=10
+url:http://127.0.0.1:8000/api/admin_set_software/?admin_code=testtest&software_id=3&software_name=测试软件1&software_each_time=720&software_cost=10&software_try=1&software_try_hours=1
 
 参数：
 admin_code 管理员密链
@@ -271,7 +271,7 @@ software_version_number 软件版本号（选填，不填写就默认为V1.0)
 software_each_time 套餐时间
 software_cost 套餐价格
 software_try 是否可以试用（1为可以，0为不可以）
-software_try_hours 如果可以试用，试用的小时（如果不可以，请不用填）
+software_try_hours 如果可以试用，试用的小时（如果不可以，请不用填，如果可以就必填）
 
 返回值：
 "success" 成功创建
@@ -279,7 +279,7 @@ software_try_hours 如果可以试用，试用的小时（如果不可以，请�
 "Error,admin code wrong!" 管理员密链错误
 "Error,bad request method POST" 错误的请求模式
 """
-def admin_set_software(request): #已测试
+def admin_set_software(request): #Done
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
     admin_code = request.GET["admin_code"]
@@ -307,7 +307,7 @@ def admin_set_software(request): #已测试
         software = Software.objects.create(software_id=int(software_id),software_name=software_name,
                                            software_version_number=software_version_number,
                                            software_each_time=int(software_each_time),
-                                           software_cost=int(software_cost),
+                                           software_cost=software_cost,
                                            software_try = software_try,
                                            software_try_hours=software_try_hours,
                                            )
@@ -322,7 +322,7 @@ url:http://127.0.0.1:8000/api/get_all_software/
 无
 返回值：
 [[1, "\u6d4b\u8bd5\u8f6f\u4ef6", "V1.1", 720, 10, false], [2, "\u6d4b\u8bd5\u8f6f\u4ef62", "V1.0", 720, 10, false], [3, "\u6d4b\u8bd5\u8f6f\u4ef63", "V1.2", 720, 10, false], [4, "\u6d4b\u8bd5\u8f6f\u4ef64", "BetaV0.3", 720, 1, true]]
-[[软件id,软件名,软件版本号,套餐时间,套餐价格,是否试用],[软件id,软件名,软件版本号,套餐时间,套餐价格,是否试用]]
+[[软件id,软件名,软件版本号,套餐时间,套餐价格,是否试用,试用时间（小时）],[软件id,软件名,软件版本号,套餐时间,套餐价格,是否试用,试用时间（小时）]]
 
 
 
@@ -334,14 +334,14 @@ def get_all_software(request):
     all_software_list = []
     for i in all_software:
         cost = "%.2f" % i.software_cost
-        a = [i.software_id,i.software_name,i.software_version_number,i.software_each_time,cost,i.software_try]
+        a = [i.software_id,i.software_name,i.software_version_number,i.software_each_time,cost,i.software_try,i.software_try_hours]
         all_software_list.append(a)
 
     return dump_and_response(all_software_list)
 
 """
 代理获取价格（此API获取得是代理打折后得价格）
-url:http://127.0.0.1:8000/api/get_all_software/?TOKEN=XXXXXXXXX
+url:http://127.0.0.1:8000/api/get_all_software_TOKEN/?TOKEN=XXXXXXXXX
 
 参数:
 TOKEN 代理密链
@@ -352,7 +352,7 @@ TOKEN 代理密链
 "Error, bad request method POST" 错误的请求方式
 "Fail, wrong TOKEN!" 密链错误
 """
-def get_all_software(request):
+def get_all_software_TOKEN(request): #Done
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
     if "TOKEN" not in request.GET:
@@ -381,13 +381,13 @@ admin_code 管理员密链
 software_id 软件ID
 software_version_number 新版本号
 返回值：
-"success" 成功修改
+"success" 成功 修改
 "software_id do not excited" 软件不存在或软件ID错误
 "Error,admin code wrong!" 管理员密链错误
 "Error,bad request method POST" 错误的请求模式
 """
 
-def admin_update_software_version(request): #已测试
+def admin_update_software_version(request): #Done
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
     admin_code = request.GET["admin_code"]
@@ -419,7 +419,7 @@ software_cost 套餐价格
 "Error,bad request method POST" 错误的请求模式
 """
 
-def admin_update_software_cost(request): #已测试
+def admin_update_software_cost(request): #Done
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
     admin_code = request.GET["admin_code"]
@@ -463,7 +463,7 @@ XXXXXXXXXXXX 如果成功，将返回15位数的特定密链（这里被称为to
 
 """
 
-def proxy_account_login(request): #已测试1
+def proxy_account_login(request): #Done
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
     username = request.GET["proxy_username"]
@@ -486,9 +486,12 @@ def proxy_account_login(request): #已测试1
 
 """
 代理修改代理账户密码
+url:
+
+
 参数：
 proxy_username 用户名
-proxy_password 密码
+proxy_password 旧密码
 proxy_new_password 新的密码
 
 返回值：
@@ -497,7 +500,7 @@ proxy_new_password 新的密码
 "Error,bad request method POST" 错误的请求模式
 """
 
-def proxy_account_change_password(request): #已测试1
+def proxy_account_change_password(request): #Done
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
     username = request.GET["proxy_username"]
@@ -526,7 +529,7 @@ ad 需要设置的广告（15字以内）
 "Error, account is Not exsited or token is fail" 如果token错误或账户不存在都返回此警告
 "Error,bad request method POST" 错误的请求模式
 """
-def proxy_account_ad_change(request): #已测试1
+def proxy_account_ad_change(request): #Done
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
     token = request.GET['token']
@@ -552,7 +555,7 @@ proxy_username 用户名
 "Error, account is Not exsited" 如果账户不存在返回此警告
 "Error,bad request method POST" 错误的请求模式
 """
-def proxy_info_get(request):
+def proxy_info_get(request): #Done
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
     username = request.GET['proxy_username']
@@ -632,7 +635,7 @@ def proxy_get_software_code(request): #已测试
     count = user[1].balance - (cost) #减了以后得余额
     #检查余额是否足够
     if count < 0:
-        return dump_and_response(["Balance not enough!",user[1].balance])
+        return dump_and_response(["Balance not enough!","%.2f" % user[1].balance])
     #生成账单
     deal_record = Deal_record.objects.create(deal_code=get_deal_code(5),acount=user[0],money=cost,symbol=False,notes="提卡—"+str(software.software_name)+"_数量："+str(howmuch))
     deal_record.save()
@@ -719,6 +722,7 @@ def authorization_make(request): #已测试
         if authorization.deadline_time < timezone.now():
             authorization.deadline_time = datetime.datetime.now()
             authorization.save()
+        authorization.customer_QQ = customer_QQ
         authorization.deadline_time = authorization.deadline_time + datetime.timedelta(hours=time_long)
         authorization.save()
         code_object.used = True
@@ -751,7 +755,7 @@ bot_QQ 机器人QQ
 "Fail" 已过期或不存在
 "Error,bad request method POST" 错误的请求模式
 """
-def authorization_check(request): #已测试
+def authorization_check(request): #Done
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
     software_id = request.GET['software_id']

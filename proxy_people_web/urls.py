@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^api/admin_proxy_account_add_api/$',admin_proxy_account_add_API,name='admin_proxy_account_add_API'),
     url(r'^api/admin_proxy_account_topup/$',admin_proxy_account_topup,name='admin_proxy_account_topup'),
     url(r'^api/get_all_software/$',get_all_software,name='get_all_software'),
+    url(r'^api/get_all_software_TOKEN/$', get_all_software_TOKEN, name='get_all_software_TOKEN'),
     url(r'^api/admin_proxy_account_balance_setup/$',admin_proxy_account_balance_setup,name='admin_proxy_account_balance_setup'),
     url(r'^api/proxy_account_balance_check/$',proxy_account_balance_check,name='proxy_account_balance_check'),
     url(r'^api/proxy_account_login/$',proxy_account_login,name='proxy_account_login'),

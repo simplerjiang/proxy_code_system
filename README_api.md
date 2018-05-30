@@ -1,7 +1,6 @@
 ﻿
 ## 代理账户开户API
-url:http://127.0.0.1:8000/api/admin_proxy_account_add_api/?admin_code=testtest&proxy_username=测试账号1&proxy_password=testtest&proxy_ad=测试广告&proxy_balance=88
-
+url:http://127.0.0.1:8000/api/admin_proxy_account_add_api/?admin_code=testtest&proxy_username=Kong4&proxy_password=testtest&proxy_ad=测试广告&proxy_balance=88
 #### 参数:
 admin_code = 管理员代码
 
@@ -12,6 +11,10 @@ proxy_password = 代理密码
 proxy_ad = 代理广告（不写就是为空字符串)
 
 proxy_balance = 代理账户金额（不写默认为0)
+
+proxy_level = 代理等级（不填就是1，最高20级）
+
+up_proxy = 上级代理用户名（不填写就是无）
 
 #### 返回值： (全部json格式）
 
@@ -48,6 +51,8 @@ money 添加金额
 "Error,bad request method POST" 错误的请求模式
 
 "Proxy account not existed" 代理账号不存在
+
+"Error, wrong number!" 充值金额低于0或等于0
 
 ---
 
@@ -133,7 +138,7 @@ url:http://127.0.0.1:8000/api/admin_set_software/?admin_code=testtest&software_i
 
 admin_code 管理员密链
 
-software_id 软件id（必须是唯一！）
+software_id 软件id（必须是唯一！）	
 
 software_name 软件名字
 
@@ -142,6 +147,11 @@ software_version_number 软件版本号（选填，不填写就默认为V1.0)
 software_each_time 套餐时间
 
 software_cost 套餐价格
+
+software_try 是否可以试用（1为可以，0为不可以）
+
+software_try_hours 如果可以试用，试用的小时（如果不可以，请不用填，如果可以就必填）
+
 
 #### 返回值：
 
@@ -310,13 +320,50 @@ proxy_username 用户名
 
 #### 返回值:
 
-["name","ad","balance"] 成功返回会有以下几个数值，第一名字，第二广告，第三余额。
+["name","ad","balance","level"] 成功返回会有以下几个数值，第一名字，第二广告，第三余额，第四是级别。
 
 "Error, account is Not exsited" 如果账户不存在返回此警告
 
 "Error,bad request method POST" 错误的请求模式
 
 
+---
+
+##获取所有软件原价信息（原价！单个代理请使用另一个API，因为代理的价格会有一定的折扣)
+
+url:http://127.0.0.1:8000/api/get_all_software/
+
+####参数:
+
+无
+
+####返回值：
+
+[[1, "\u6d4b\u8bd5\u8f6f\u4ef6", "V1.1", 720, 10, false], [2, "\u6d4b\u8bd5\u8f6f\u4ef62", "V1.0", 720, 10, false], [3, "\u6d4b\u8bd5\u8f6f\u4ef63", "V1.2", 720, 10, false], [4, "\u6d4b\u8bd5\u8f6f\u4ef64", "BetaV0.3", 720, 1, true]]
+
+[[软件id,软件名,软件版本号,套餐时间,套餐价格,是否试用,试用时间（小时）],[软件id,软件名,软件版本号,套餐时间,套餐价格,是否试用,试用时间（小时）]]
+
+---
+
+##代理获取价格（此API获取得是代理打折后得价格）
+
+url:http://127.0.0.1:8000/api/get_all_software_TOKEN/?TOKEN=XXXXXXXXX
+
+####参数:
+
+TOKEN 代理密链
+
+####返回值：
+
+[[1, "\u6d4b\u8bd5\u8f6f\u4ef6", "V1.1", 720, 10, false], [2, "\u6d4b\u8bd5\u8f6f\u4ef62", "V1.0", 720, 10, false], [3, "\u6d4b\u8bd5\u8f6f\u4ef63", "V1.2", 720, 10, false], [4, "\u6d4b\u8bd5\u8f6f\u4ef64", "BetaV0.3", 720, 1, true]]
+
+[[软件id,软件名,软件版本号,套餐时间,套餐价格,是否试用],[软件id,软件名,软件版本号,套餐时间,套餐价格,是否试用]]
+
+"Fail, require TOKEN!" 错误，需要代理密链
+
+"Error, bad request method POST" 错误的请求方式
+
+"Fail, wrong TOKEN!" 密链错误
 
 ---
 
@@ -342,11 +389,7 @@ HowMuch 提多少张
 
 ["n7o7I7M3I4", "r6X7D6O5g1", "c0Z4b3s6F7"] 如果成功，将返回一个列表
 
-
-
 "Error, HowMuch lower than 0" 提卡数量小于或等于0
-
-
 
 "Error, account is Not exsited or token is fail" 如果token错误或账户不存在都返回此警告
 
@@ -414,6 +457,8 @@ bot_QQ 机器人QQ
 
 ["success","2018-05-06 15:01:35","测试广告"] 	如果成功，第二个值会为到期时间，第三个是代理商的广告
 
+["try_success","2018-05-06 15:01:35"] 如果是试用，则返回此内容，不返回代理广告
+
 "Fail" 已过期或不存在
 
 "Error,bad request method POST" 错误的请求模式
@@ -424,7 +469,7 @@ bot_QQ 机器人QQ
 
 
 
-## 更换授权机器人QQ
+## 更换授权机器人QQ(试用授权无法更换）
 
 url:http://127.0.0.1:8000/api/authorization_change/?software_id=1&new_bot_QQ=1414&customer_QQ=123123
 
@@ -452,18 +497,6 @@ customer_QQ 客户QQ
 
 ---
 
-## 获取所有软件信息
-
-url:http://127.0.0.1:8000/api/get_all_software/
-
-#### 参数:
-无
-
-#### 返回值：
-
-[[1, "\u6d4b\u8bd5\u8f6f\u4ef6", "V1.1", 720, 10, false], [2, "\u6d4b\u8bd5\u8f6f\u4ef62", "V1.0", 720, 10, false], [3, "\u6d4b\u8bd5\u8f6f\u4ef63", "V1.2", 720, 10, false], [4, "\u6d4b\u8bd5\u8f6f\u4ef64", "BetaV0.3", 720, 1, true]]
-
-[[软件id,软件名,软件版本号,套餐时间,套餐价格,是否试用],[软件id,软件名,软件版本号,套餐时间,套餐价格,是否试用]]
 
 
 
