@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% block title %}
-修改下级代理信息-- {{ down_user_object.username }}
+创建新的下级代理账号 -- -- 软件代理后台
 {% endblock %}
 {% block wrapper %}
         <!-- Page wrapper  -->
@@ -9,12 +9,11 @@
             <!-- Bread crumb -->
             <div class="row page-titles">
                 <div class="col-md-5 align-self-center">
-                    <h3 class="text-primary">下级代理信息 -- {{ down_user_object.username }}</h3> </div>
+                    <h3 class="text-primary">创建新的下级代理</h3> </div>
                 <div class="col-md-7 align-self-center">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{% url "index" %}">主页</a></li>
-                        <li class="breadcrumb-item active"><a href="{% url "check_all_down_proxy" %}">查看下级代理</a></li>
-                        <li class="breadcrumb-item active">修改下级代理信息</li>
+                        <li class="breadcrumb-item active">创建下级代理</li>
                     </ol>
                 </div>
             </div>
@@ -28,7 +27,7 @@
                             <div class="tab-content">
                                 <div class="tab-pane active" id="home" role="tabpanel">
                                     <div class="card-body">
-                                        <form class="form-horizontal form-material" action="{% url "change_down_proxy_info" down_user_object.id %}" method="post">
+                                        <form class="form-horizontal form-material" action="{% url "create_new_down_account" %}" method="post">
                                             {% csrf_token %}
                                             {% if warn %}
                                             <div class="form-group">
@@ -50,37 +49,37 @@
                                                 <br>
                                                 <label class="col-md-12">用户名</label>
                                                 <div class="col-md-12">
-                                                    <input type="text" placeholder="{{ down_user_object.username }}" class="form-control form-control-line" disabled="disabled" >
+                                                    <input type="text" placeholder="请输入用户名" class="form-control form-control-line" name="proxy_username" >
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <br>
                                                 <label class="col-md-12">VIP级别</label>
                                                 <div class="col-md-12">
-                                                    <input type="text" value="{{ down_user_others.level }}" class="form-control form-control-line" name="level" >
+                                                    <input type="text" placeholder="1-{{ level }}级 需小于你的VIP级别 （例如：1）" class="form-control form-control-line" name="level" >
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="example-email" class="col-md-12">QQ号码</label>
                                                 <div class="col-md-12">
-                                                    <input type="text" value="{{ down_user_object.email }}" class="form-control form-control-line" name="qq" >
+                                                    <input type="text" placeholder="新账户的QQ号" class="form-control form-control-line" name="qq" >
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-md-12">新密码</label>
+                                                <label class="col-md-12">密码</label>
                                                 <div class="col-md-12">
-                                                    <input type="password" value=''placeholder="请输入密码（如不需要更改请勿输入)" class="form-control form-control-line" name="pw">
+                                                    <input type="password" value=''placeholder="请输入密码" class="form-control form-control-line" name="pw">
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label class="col-md-12">第二次输入新密码</label>
+                                                <label class="col-md-12">第二次输入密码</label>
                                                 <div class="col-md-12">
-                                                    <input type="password" value='' placeholder="请再输入密码（如不需要更改请勿输入)" class="form-control form-control-line" name="pwa">
+                                                    <input type="password" value='' placeholder="请再输入密码" class="form-control form-control-line" name="pwa">
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-sm-12">
-                                                    <button class="btn btn-success">更新信息</button>
+                                                    <button class="btn btn-success">创建账号</button>
                                                 </div>
                                             </div>
                                         </form>

@@ -574,6 +574,8 @@ money_account_name 提现方式（必须为特定名字，"支付宝" "QQ" "微�
 
 money_account_num 提现账号名（手机号或邮箱号）
 
+money_account_name 户主名 （用于验证收款账号是否正确）
+
 ####返回值：
 
 "success, please wait" 提现申请成功，请等待
@@ -589,5 +591,7 @@ money_account_num 提现账号名（手机号或邮箱号）
 "Error, money is wrong!" 金额设置错误，可能是低于0元，注意 -1是否为英文符号
 
 "Balance is not enought" 账户余额不足
+
+"Error, miss money_account_name" 缺少户主名
 
 

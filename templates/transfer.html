@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% block title %}
-修改下级代理信息-- {{ down_user_object.username }}
+转账 -- -- 软件代理后台
 {% endblock %}
 {% block wrapper %}
         <!-- Page wrapper  -->
@@ -9,12 +9,11 @@
             <!-- Bread crumb -->
             <div class="row page-titles">
                 <div class="col-md-5 align-self-center">
-                    <h3 class="text-primary">下级代理信息 -- {{ down_user_object.username }}</h3> </div>
+                    <h3 class="text-primary">转账汇款</h3> </div>
                 <div class="col-md-7 align-self-center">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{% url "index" %}">主页</a></li>
-                        <li class="breadcrumb-item active"><a href="{% url "check_all_down_proxy" %}">查看下级代理</a></li>
-                        <li class="breadcrumb-item active">修改下级代理信息</li>
+                        <li class="breadcrumb-item active">转账汇款</li>
                     </ol>
                 </div>
             </div>
@@ -22,13 +21,13 @@
                         <div class="card">
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs profile-tab" role="tablist">
-                                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab">修改个人资料</a> </li>
+                                <li class="nav-item"> <a class="nav-link active" data-toggle="tab" href="#home" role="tab">转账汇款</a> </li>
                             </ul>
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div class="tab-pane active" id="home" role="tabpanel">
                                     <div class="card-body">
-                                        <form class="form-horizontal form-material" action="{% url "change_down_proxy_info" down_user_object.id %}" method="post">
+                                        <form class="form-horizontal form-material" action="{% url "transfer" %}" method="post">
                                             {% csrf_token %}
                                             {% if warn %}
                                             <div class="form-group">
@@ -48,39 +47,34 @@
                                             {% endif %}
                                             <div class="form-group">
                                                 <br>
-                                                <label class="col-md-12">用户名</label>
+                                                <label class="col-md-12">金额</label>
                                                 <div class="col-md-12">
-                                                    <input type="text" placeholder="{{ down_user_object.username }}" class="form-control form-control-line" disabled="disabled" >
+                                                    <input type="text" placeholder="请输入需要转账的金额（余额为：{{ balance }}）" class="form-control form-control-line" name="money" >
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <br>
-                                                <label class="col-md-12">VIP级别</label>
+                                                <label class="col-md-12">收款账户（只允许对下级代理账户转账）</label>
                                                 <div class="col-md-12">
-                                                    <input type="text" value="{{ down_user_others.level }}" class="form-control form-control-line" name="level" >
+                                                <select class="form-control" name="account">
+                                                    {% if down_account_list %}
+                                                        {% for i in down_account_list %}
+                                                        <option value="{{ i.user.id }}">用户：{{ i.user.username }}</option>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <option value="0">你暂无下级账户，无法转账</option>
+                                                    {% endif %}
+                                                </select>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="example-email" class="col-md-12">QQ号码</label>
+                                                <label for="example-email" class="col-md-12">提示</label>
                                                 <div class="col-md-12">
-                                                    <input type="text" value="{{ down_user_object.email }}" class="form-control form-control-line" name="qq" >
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-md-12">新密码</label>
-                                                <div class="col-md-12">
-                                                    <input type="password" value=''placeholder="请输入密码（如不需要更改请勿输入)" class="form-control form-control-line" name="pw">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="col-md-12">第二次输入新密码</label>
-                                                <div class="col-md-12">
-                                                    <input type="password" value='' placeholder="请再输入密码（如不需要更改请勿输入)" class="form-control form-control-line" name="pwa">
+                                                    <input type="text" placeholder="转账后无法追回！请核实账号！" class="form-control form-control-line" disabled="disabled" >
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-sm-12">
-                                                    <button class="btn btn-success">更新信息</button>
+                                                    <button class="btn btn-success">确认转账</button>
                                                 </div>
                                             </div>
                                         </form>

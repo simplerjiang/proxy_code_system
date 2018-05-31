@@ -56,6 +56,9 @@ urlpatterns = [
     url(r'^check_auth/(?P<pk>[0-9]+)/$',check_auth,name='check_auth'),
     url(r'^check_all_down_proxy/$',check_all_down_proxy,name='check_all_down_proxy'),
     url(r'^change_down_proxy_info/(?P<pk>[0-9]+)/$',change_down_proxy_info,name='change_down_proxy_info'),
+    url(r'^create_new_down_account/$',create_new_down_account,name='create_new_down_account'),
+    url(r'^get_money/$',get_money,name='get_money'),
+    url(r'^transfer/$',transfer,name='transfer'),
 ]
 
 urlpatterns +=patterns('',

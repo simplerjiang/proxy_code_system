@@ -74,7 +74,7 @@ up_proxy = 上级代理用户名（不填写就是无）
 "Error, admin code wrong"  管理员代码错误
 "Error,bad request method POST" 错误的请求模式
 "Fail, up_proxy is wrong!" 上级代理输入错误，不存在！
-"Fail, proxy_level higher than 20!" 代理等级大于20！
+"Fail, proxy_level higher than 20!" 代理等级大于20（或小于等于0)！
 """
 
 def admin_proxy_account_add_API(request): #Done
@@ -96,7 +96,7 @@ def admin_proxy_account_add_API(request): #Done
     try:
         proxy_level = request.GET['proxy_level']
         proxy_level = int(proxy_level)
-        if proxy_level > 20:
+        if proxy_level > 20 or proxy_level <= 0:
             return dump_and_response("Fail, proxy_level higher than 20!")
     except:
         proxy_level = 1
@@ -853,7 +853,7 @@ def proxy_open_new_account(request):
         return dump_and_response("Fail,account already existed")
     except:
         pass
-    if proxy_level >= user[1].level or proxy_level < 0:
+    if proxy_level >= user[1].level or proxy_level <= 0:
         return dump_and_response("Fail,proxy_level is not allow")
     up_proxy = user[0].id
     #开户
@@ -921,22 +921,23 @@ def proxy_transfer_money(request):
 """
 代理申请提现（提现金额必须大于10)
 
-url:http://127.0.0.1:8000/api/proxy_get_out_money/?TOKEN=123ddd&money_account_name=支付宝&money=100&money_account_num=130000000
+url:http://127.0.0.1:8000/api/proxy_get_out_money/?TOKEN=123ddd&money_account_kind=支付宝&money=100&money_account_num=130000000
 
 参数：
 TOKEN
 money 提现金额 （输入-1等于提现所有金额）
-money_account_name 提现方式（必须为特定名字，"支付宝" "QQ" "微信"，如果不是会返回错误）
+money_account_kind 提现方式（必须为特定名字，"支付宝" "QQ" "微信"，如果不是会返回错误）
 money_account_num 提现账号名（手机号或邮箱号）
-
+money_account_name 户主名 （用于验证收款账号是否正确）
 返回值：
 "success, please wait" 提现申请成功，请等待
 "Error, money is lower than 10!" 提现金额过少，必须大于0 
-"Error, money_account_name is wrong!" 提现方式错误（必须为特定名字，"支付宝" "QQ" "微信"，如果不是会返回错误）
+"Error, money_account_kind is wrong!" 提现方式错误（必须为特定名字，"支付宝" "QQ" "微信"，如果不是会返回错误）
 "Error, bad request method POST" 错误的
 "Error, account is Not exsited or token is fail" 账号密链错误
 "Error, money is wrong!" 金额设置错误，可能是低于0元，注意 -1是否为英文符号
 "Balance is not enought" 账户余额不足
+"Error, miss money_account_name" 缺少户主名
 """
 
 def proxy_get_out_money(request):
@@ -948,13 +949,17 @@ def proxy_get_out_money(request):
     if not user:
         return dump_and_response("Error, account is Not exsited or token is fail")
 
-    money_account_name = request.GET['money_account_name']
+    money_account_kind = request.GET['money_account_kind']
     money_account_num = request.GET['money_account_num']
     money = Decimal(request.GET['money'])
     if money < 10 and money != -1:
         return dump_and_response("Error, money is lower than 10!")
-    if money_account_name not in ["支付宝","QQ","微信"]:
-        return dump_and_response("Error, money_account_name is wrong!")
+    if money_account_kind not in ["支付宝","QQ","微信"]:
+        return dump_and_response("Error, money_account_kind is wrong!")
+    if "money_account_name" in request.GET:
+        money_account_name = request.GET['money_account_name']
+    else:
+        return dump_and_response("Error, miss money_account_name")
     if money == -1:
         if user[1].balance < 10:
             return dump_and_response("Balance is not enought")
@@ -964,18 +969,18 @@ def proxy_get_out_money(request):
             user[1].save()
             deal_record_object =  Deal_record.objects.create(deal_code=get_deal_code(5),acount=user[0],money=money,symbol=False,notes="API操作申请提现")
             deal_record_object.save()
-            get_money_object = Getmoney.objects.create(proxy_account=user[0],money=money,money_account_name=money_account_name,money_account_num=money_account_num)
+            get_money_object = Getmoney.objects.create(proxy_account=user[0],money=money,money_account_name=money_account_kind,money_account_num=money_account_num,account_name=money_account_name)
             get_money_object.save()
             return dump_and_response("success, please wait")
     elif money > 0:
         if user[1].balance - money < 0:
             return dump_and_response("Balance is not enought")
         else:
-            user[1].balance -= money
+            user[1].balance -= money #扣款
             user[1].save()
             deal_record_object =  Deal_record.objects.create(deal_code=get_deal_code(5),acount=user[0],money=money,symbol=False,notes="API操作申请提现")
             deal_record_object.save()
-            get_money_object = Getmoney.objects.create(proxy_account=user[0],money=money,money_account_name=money_account_name,money_account_num=money_account_num)
+            get_money_object = Getmoney.objects.create(proxy_account=user[0],money=money,money_account_name=money_account_kind,money_account_num=money_account_num)
             get_money_object.save()
             return dump_and_response("success, please wait")
     else:

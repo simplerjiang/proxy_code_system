@@ -155,7 +155,10 @@
                                     <li><a href="{% url "profile_setting" %}"><i class="ti-user"></i> 用户：{{ user.username }}</a></li>
                                     <li><a href="{% url "shop" %}"><i class="ti-wallet"></i> 购买授权</a></li>
                                     <li><a href="{% url "check_all_deal" %}"><i class="ti-email"></i> 查看订单</a></li>
-                                    <li><a href="{% url "check_all_auth" %}"><i class="ti-wallet"></i> 管理授权</a></li>
+                                    <li><a href="{% url "check_all_auth" %}"><i class="ti-email"></i> 管理授权</a></li>
+                                    <li><a href="{% url "transfer" %}"><i class="ti-wallet"></i> 转账</a></li>
+                                    <li><a href="{% url "get_money" %}"><i class="ti-wallet"></i> 提现</a></li>
+                                    <li><a href="{% url "create_new_down_account" %}"><i class="ti-user"></i> 创建下级代理</a></li>
                                     <li><a href="{% url "check_all_down_proxy" %}"><i class="ti-user"></i> 管理下级代理</a></li>
                                     <li><a href="{% url "logout" %}"><i class="fa fa-power-off"></i> 登出</a></li>
                                 </ul>
@@ -180,7 +183,10 @@
                         <li> <a class="has-arrow  " href="{% url "shop" %}" aria-expanded="false"><i class="fa fa-suitcase"></i><span class="hide-menu">购买授权</span></a></li>
                         <li> <a class="has-arrow  " href="{% url "check_all_deal" %}" aria-expanded="false"><i class="fa fa-suitcase"></i><span class="hide-menu">查看订单</span></a></li>
                         <li> <a class="has-arrow  " href="{% url "check_all_auth" %}" aria-expanded="false"><i class="fa fa-suitcase"></i><span class="hide-menu">管理授权</span></a></li>
+                        <li> <a class="has-arrow  " href="{% url "create_new_down_account" %}" aria-expanded="false"><i class="fa fa-suitcase"></i><span class="hide-menu">创建下级代理</span></a></li>
                         <li> <a class="has-arrow  " href="{% url "check_all_down_proxy" %}" aria-expanded="false"><i class="fa fa-suitcase"></i><span class="hide-menu">管理下级代理</span></a></li>
+                        <li> <a class="has-arrow  " href="{% url "get_money" %}" aria-expanded="false"><i class="fa fa-suitcase"></i><span class="hide-menu">提现</span></a></li>
+                        <li> <a class="has-arrow  " href="{% url "transfer" %}" aria-expanded="false"><i class="fa fa-suitcase"></i><span class="hide-menu">转账</span></a></li>
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->

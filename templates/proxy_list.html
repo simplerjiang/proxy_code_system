@@ -35,7 +35,7 @@
                                                 <th>下级代理级别</th>
                                                 <th>下级代理余额</th>
                                                 <th>下级代理QQ</th>
-                                                <th>点击修改密码</th>
+                                                <th>点击修改信息</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
@@ -44,7 +44,7 @@
                                                 <th>下级代理级别</th>
                                                 <th>下级代理余额</th>
                                                 <th>下级代理QQ</th>
-                                                <th>点击修改密码</th>
+                                                <th>点击修改信息</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
@@ -55,7 +55,7 @@
                                                 <td style="color: #008c86">VIP{{ i.level }}</td>
                                                 <td style="color: #008c86">{{ i.balance}}</td>
                                                 <td style="color: #008c86">{{ i.user.email }}</td>
-                                                <td><a href="{% url "change_down_proxy_info" i.user.id %}">点击修改密码</a></td>
+                                                <td><a href="{% url "change_down_proxy_info" i.user.id %}">点击修改信息</a></td>
                                             </tr>
                                         {% endfor %}
                                         {% else %}

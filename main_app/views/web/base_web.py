@@ -244,11 +244,14 @@ def profile_setting(request):
             context["others_info"] = others_info
         except:
             context = {"others_info": others_info}
-        if opw != '' and pw != '' and pwa != '':
+        if opw != '' or pw != '' or pwa != '':
             user = authenticate(username=request.user.username, password=opw)
             if user != None:
                 if user.is_active:
                     if pw == pwa:
+                        if pw == '' or pwa == '':
+                            context['warn'] = "请输入新密码！"
+                            return render(request, 'profile.html', context)
                         user.set_password(pw)
                         user.save()
                         context['success'] = "修改成功！"
@@ -340,6 +343,7 @@ def change_down_proxy_info(request,pk):
             return render(request,'down_proxy_detail.html',context)
     elif request.method == "POST":
         user_id = request.user.id
+        user = get_proxy_account(pk_id=user_id)
         try:
             down_user = User.objects.get(pk=pk)
         except User.DoesNotExist:
@@ -349,6 +353,36 @@ def change_down_proxy_info(request,pk):
         if down_user[1].up_proxy != int(user_id):
             raise Http404("想干啥？")
         context = {"down_user_object": down_user[0], "down_user_others": down_user[1]}
+        level = request.POST['level']
+        qq = request.POST['qq']
+        if level == '' or qq == '':
+            context['warn'] = "修改失败！不可以清除信息！"
+            return render(request, 'down_proxy_detail.html', context)
+
+        try:
+            level = int(level)
+        except:
+            context['warn'] = "请输入正确的等级！（例如：1）"
+            return render(request,'down_proxy_detail.html',context)
+
+        if level <= 0:
+            context['warn'] = "请输入大于0的等级！（例如：1）"
+            return render(request, 'down_proxy_detail.html', context)
+
+        if level >= user[1].level:
+            context['warn'] = "请输入小于的自身！（例如：1）"
+            return render(request, 'down_proxy_detail.html', context)
+
+        if level != down_user[1].level:
+            down_user[1].level = level
+            down_user[1].save()
+            context["success"] = "等级修改成功！"
+
+        if qq != down_user[0].email:
+            down_user[0].email = qq
+            down_user[0].save()
+            context['success'] = 'QQ号修改成功！'
+
         if "pw" in request.POST and "pwa" in request.POST:
             pw = request.POST['pw']
             pwa = request.POST['pwa']
@@ -357,12 +391,187 @@ def change_down_proxy_info(request,pk):
                     down_user[0].set_password(pw)
                     down_user[0].save()
 
-                    context['success'] = "修改成功！"
+                    context['success'] = "密码修改成功！"
                     return render(request,"down_proxy_detail.html",context)
                 else:
                     context['warn'] = "新密码输入两次错误！请重试"
                     return render(request, 'down_proxy_detail.html', context)
             else:
-                return render(request, 'down_proxy_detail.html', context)
+                if pw != '' or pwa != '':
+                    context['warn'] = "请输入新密码!"
+                    return render(request, 'down_proxy_detail.html', context)
+                else:
+                    return render(request, 'down_proxy_detail.html', context)
         else:
             return render(request,'down_proxy_detail.html',context)
+
+
+@login_required
+def create_new_down_account(request):
+    if request.method == "GET":
+        user = get_proxy_account(username=request.user.username)
+        level = str(user[1].level - 1)
+        context = {"level":level}
+        return render(request,"add_down_proxy.html",context)
+    elif request.method == "POST":
+        user = get_proxy_account(username=request.user.username)
+        context = {"level":str(user[1].level - 1)}
+        if "proxy_username" in request.POST:
+            proxy_username = request.POST['proxy_username']
+            try:
+                User.objects.get_by_natural_key(username=proxy_username)
+                context['warn'] = "用户名已存在，请重试！"
+                return render(request, 'add_down_proxy.html', context)
+            except User.DoesNotExist:
+                pass
+
+        else:
+            return render(request, 'add_down_proxy.html', context)
+
+        if "pw" in request.POST and "pwa" in request.POST:
+            pw = request.POST['pw']
+            pwa = request.POST['pwa']
+            if pw != pwa:
+                context['warn'] = "密码二次验证输入错误！请重试"
+                return render(request, 'add_down_proxy.html', context)
+            elif pw == '' or pwa == '':
+                context['warn'] = "请输入密码！请重试"
+                return render(request, 'add_down_proxy.html', context)
+        else:#错误提示
+            context['warn'] = "请输入密码！请重试"
+            return render(request, 'add_down_proxy.html', context)
+        if "qq" in request.POST:
+            qq = request.POST['qq']
+            if qq == '':
+                context['warn'] = "请输入QQ号！请重试"
+                return render(request, 'add_down_proxy.html', context)
+        else:
+            context['warn'] = "请输入QQ号！请重试"
+            return render(request, 'add_down_proxy.html', context)
+        if "level" in request.POST:
+            down_level = request.POST['level']
+            try:
+                down_level = int(down_level)
+            except:
+                context['warn'] = "请输入正确的等级！（例如：1）"
+                return render(request, 'add_down_proxy.html', context)
+            if down_level <= 0:
+                context['warn'] = "请输入正确的等级！（例如：1）"
+                return render(request, 'add_down_proxy.html', context)
+            elif down_level >= user[1].level:
+                context['warn'] = "请输入小于自身账户的等级！"
+                return render(request, 'add_down_proxy.html', context)
+        else:
+            context['warn'] = "请输入新账号的等级！请重试"
+            return render(request, 'add_down_proxy.html', context)
+        down_user = User.objects.create(username=proxy_username,password=pw,email=qq)
+        down_user.save()
+        down_user_others = Others_info.objects.create(user=down_user,TOKEN=get_TOKEN(),level=down_level,up_proxy=user[0].id)
+        down_user_others.save()
+        return redirect("change_down_proxy_info",down_user.id)
+
+@login_required
+def get_money(request):
+    if request.method == "GET":
+        user = get_proxy_account(username=request.user.username)
+        context = {"balance":user[1].balance}
+        return render(request,"getmoney.html",context)
+
+    elif request.method == "POST":
+        user = get_proxy_account(username=request.user.username)
+        context = {"balance":user[1].balance}
+        money = request.POST['money']
+        money_account_kind = request.POST['money_account_kind']
+        money_account_num = request.POST['money_account_num']
+        money_account_name = request.POST['money_account_name']
+        if money == '' or money_account_num == '' or money_account_name == '' or money_account_kind == '':
+            context["warn"] = "请输入完整信息！"
+            return render(request,"getmoney.html",context)
+
+        try:
+            money = Decimal(money)
+        except decimal.InvalidOperation:
+            context["warn"] = "请输入正确的提款金额"
+            return render(request,"getmoney.html",context)
+
+        if user[1].balance - money < 0:
+            context['warn'] = "账户余额不足！请重试！"
+            return render(request,"getmoney.html",context)
+
+        #开始扣费
+        user[1].balance -= money
+        user[1].save()
+        #创建订单
+        deal_record = Deal_record.objects.create(deal_code=get_deal_code(5),acount=user[0],money=money,symbol=False,notes="网页提现操作")
+        deal_record.save()
+
+        #创建提现单
+        get_money_object = Getmoney.objects.create(proxy_account=user[0],money=money,money_account_name=money_account_kind,money_account_num=money_account_num,account_name=money_account_name)
+        get_money_object.save()
+        return redirect("check_all_deal")
+
+
+@login_required
+def transfer(request):
+    if request.method == "GET":
+        user = get_proxy_account(username=request.user.username)
+        down_account_list = Others_info.objects.filter(up_proxy=user[0].id)
+        context = {"down_account_list":down_account_list,"balance":user[1].balance}
+        return render(request,"transfer.html",context)
+
+    elif request.method == "POST":
+        user=get_proxy_account(username=request.user.username)
+        down_account_list = Others_info.objects.filter(up_proxy=user[0].id)
+        context = {"down_account_list":down_account_list,"balance":user[1].balance}
+
+        money = request.POST['money']
+        account = request.POST['account']
+        if money == '' or account == '':
+            context['warn'] = "请输入转账信息！"
+            return render(request,"transfer.html",context)
+
+        if account == '0':
+            return render(request,'transfer.html',context)
+
+        try:
+            money = Decimal(money)
+        except:
+            context['warn'] = "请输入正确的金额"
+            return render(request, 'transfer.html', context)
+        if money <= 0:
+            context['warn'] = "请输入正确的金额"
+            return render(request, 'transfer.html', context)
+
+        if user[1].balance - money < 0:
+            context['warn'] = "你的余额不足，请重新尝试！"
+            return render(request, 'transfer.html', context)
+
+        account = int(account)
+        target_account = get_proxy_account(pk_id=account)
+        if target_account == False:
+            context['warn'] = "账号错误！请重新尝试！"
+            return render(request, 'transfer.html', context)
+        if target_account[1].up_proxy != user[0].id:
+            context['warn'] = "账号不属于你的下级代理！请重试！"
+            return render(request, 'transfer.html', context)
+        #开始扣款
+        user[1].balance -= money
+        user[1].save()
+
+        #转出者创建订单
+        my_deal_record = Deal_record.objects.create(deal_code=get_deal_code(5),acount=user[0],money=money,symbol=False,notes="网页转账-转出")
+        my_deal_record.save()
+
+        #转入者收款
+        target_account[1].balance += money #收款
+        target_account[1].save()
+
+        target_deal_record = Deal_record.objects.create(deal_code=get_deal_code(5),acount=target_account[0],money=money,notes="网页转账-转入")
+        target_deal_record.save()
+
+        context['success'] = "成功转账！收款账号：" + target_account[0].username + "  金额：%.2f" % money
+        context['balance'] = user[1].balance
+        return render(request,'transfer.html',context)
+
+
+
