@@ -532,6 +532,7 @@ proxy_level = 下级代理等级（只能够填写小于当前开户级别的代
 
 
 ---
+
 ##代理向下级转账（仅限上级向下级转账，其他都不可行）
 
 url:http://127.0.0.1:8000/api/proxy_transfer_money/?TOKEN=XXXXXXXXXXXX&proxy_name=XXXX&money=10

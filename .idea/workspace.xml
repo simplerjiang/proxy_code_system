@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eca19ce4-9dce-47c8-aee5-d280f6e4a014" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/README_api.md" afterPath="$PROJECT_DIR$/README_api.md" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
-      <change beforePath="$PROJECT_DIR$/main_app/models.py" afterPath="$PROJECT_DIR$/main_app/models.py" />
-      <change beforePath="$PROJECT_DIR$/main_app/views/api.py" afterPath="$PROJECT_DIR$/main_app/views/api.py" />
-      <change beforePath="$PROJECT_DIR$/main_app/views/web/base_web.py" afterPath="$PROJECT_DIR$/main_app/views/web/base_web.py" />
-      <change beforePath="$PROJECT_DIR$/proxy_people_web/urls.py" afterPath="$PROJECT_DIR$/proxy_people_web/urls.py" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" afterPath="$PROJECT_DIR$/templates/base.html" />
-      <change beforePath="$PROJECT_DIR$/templates/down_proxy_detail.html" afterPath="$PROJECT_DIR$/templates/down_proxy_detail.html" />
-      <change beforePath="$PROJECT_DIR$/templates/proxy_list.html" afterPath="$PROJECT_DIR$/templates/proxy_list.html" />
+      <change beforePath="$PROJECT_DIR$/templates/add_down_proxy.html" afterPath="$PROJECT_DIR$/templates/add_down_proxy.html" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -24,11 +16,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="transfer.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="transfer.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/transfer.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-544">
-              <caret line="29" column="108" lean-forward="false" selection-start-line="29" selection-start-column="108" selection-end-line="29" selection-end-column="108" />
+            <state relative-caret-position="480">
+              <caret line="58" column="29" lean-forward="false" selection-start-line="58" selection-start-column="29" selection-end-line="58" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="add_down_proxy.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/add_down_proxy.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="368">
+              <caret line="23" column="129" lean-forward="false" selection-start-line="23" selection-start-column="129" selection-end-line="23" selection-end-column="129" />
               <folding />
             </state>
           </provider>
@@ -37,7 +39,7 @@
       <file leaf-file-name="base_web.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main_app/views/web/base_web.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="608">
+            <state relative-caret-position="8976">
               <caret line="572" column="44" lean-forward="false" selection-start-line="572" selection-start-column="44" selection-end-line="572" selection-end-column="44" />
               <folding />
             </state>
@@ -47,7 +49,7 @@
       <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main_app/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="320">
+            <state relative-caret-position="1424">
               <caret line="94" column="9" lean-forward="false" selection-start-line="94" selection-start-column="4" selection-end-line="94" selection-end-column="9" />
               <folding />
             </state>
@@ -57,17 +59,17 @@
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/proxy_people_web/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="304">
+            <state relative-caret-position="880">
               <caret line="59" column="49" lean-forward="false" selection-start-line="59" selection-start-column="40" selection-end-line="59" selection-end-column="49" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="api.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="api.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main_app/views/api.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="112">
+            <state relative-caret-position="1088">
               <caret line="978" column="40" lean-forward="false" selection-start-line="978" selection-start-column="40" selection-end-line="978" selection-end-column="40" />
               <folding>
                 <element signature="e#64#99#0" expanded="true" />
@@ -79,8 +81,8 @@
       <file leaf-file-name="base.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="171" column="30" lean-forward="true" selection-start-line="171" selection-start-column="30" selection-end-line="171" selection-end-column="30" />
+            <state relative-caret-position="2736">
+              <caret line="171" column="30" lean-forward="false" selection-start-line="171" selection-start-column="30" selection-end-line="171" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -99,7 +101,7 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1392">
+            <state relative-caret-position="48">
               <caret line="3" column="22" lean-forward="false" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="22" />
               <folding />
             </state>
@@ -158,7 +160,6 @@
         <option value="$PROJECT_DIR$/templates/page-deal.html" />
         <option value="$PROJECT_DIR$/templates/table-datatable.html" />
         <option value="$PROJECT_DIR$/main_app/admin.py" />
-        <option value="$PROJECT_DIR$/templates/add_down_proxy.html" />
         <option value="$PROJECT_DIR$/templates/down_proxy_detail.html" />
         <option value="$PROJECT_DIR$/templates/proxy_list.html" />
         <option value="$PROJECT_DIR$/templates/getmoney.html" />
@@ -168,6 +169,7 @@
         <option value="$PROJECT_DIR$/main_app/views/api.py" />
         <option value="$PROJECT_DIR$/main_app/views/web/base_web.py" />
         <option value="$PROJECT_DIR$/templates/base.html" />
+        <option value="$PROJECT_DIR$/templates/add_down_proxy.html" />
       </list>
     </option>
   </component>
@@ -199,7 +201,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -245,6 +246,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -340,7 +342,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3285968" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3285968" sideWeight="0.487055" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3285968" sideWeight="0.487055" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.302589" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
@@ -638,17 +640,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
           <caret line="19" column="32" lean-forward="true" selection-start-line="19" selection-start-column="32" selection-end-line="19" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#32#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/add_down_proxy.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-208">
-          <caret line="29" column="124" lean-forward="false" selection-start-line="29" selection-start-column="124" selection-end-line="29" selection-end-column="124" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -686,7 +677,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main_app/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
+        <state relative-caret-position="1424">
           <caret line="94" column="9" lean-forward="false" selection-start-line="94" selection-start-column="4" selection-end-line="94" selection-end-column="9" />
           <folding />
         </state>
@@ -694,7 +685,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main_app/views/web/base_web.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="608">
+        <state relative-caret-position="8976">
           <caret line="572" column="44" lean-forward="false" selection-start-line="572" selection-start-column="44" selection-end-line="572" selection-end-column="44" />
           <folding />
         </state>
@@ -702,7 +693,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1392">
+        <state relative-caret-position="48">
           <caret line="3" column="22" lean-forward="false" selection-start-line="3" selection-start-column="22" selection-end-line="3" selection-end-column="22" />
           <folding />
         </state>
@@ -718,35 +709,43 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/proxy_people_web/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
+        <state relative-caret-position="880">
           <caret line="59" column="49" lean-forward="false" selection-start-line="59" selection-start-column="40" selection-end-line="59" selection-end-column="49" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main_app/views/api.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="978" column="40" lean-forward="false" selection-start-line="978" selection-start-column="40" selection-end-line="978" selection-end-column="40" />
-          <folding>
-            <element signature="e#64#99#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/templates/base.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="171" column="30" lean-forward="true" selection-start-line="171" selection-start-column="30" selection-end-line="171" selection-end-column="30" />
+        <state relative-caret-position="2736">
+          <caret line="171" column="30" lean-forward="false" selection-start-line="171" selection-start-column="30" selection-end-line="171" selection-end-column="30" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/transfer.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-544">
-          <caret line="29" column="108" lean-forward="false" selection-start-line="29" selection-start-column="108" selection-end-line="29" selection-end-column="108" />
+        <state relative-caret-position="480">
+          <caret line="58" column="29" lean-forward="false" selection-start-line="58" selection-start-column="29" selection-end-line="58" selection-end-column="29" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/add_down_proxy.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="368">
+          <caret line="23" column="129" lean-forward="false" selection-start-line="23" selection-start-column="129" selection-end-line="23" selection-end-column="129" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main_app/views/api.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1088">
+          <caret line="978" column="40" lean-forward="false" selection-start-line="978" selection-start-column="40" selection-end-line="978" selection-end-column="40" />
+          <folding>
+            <element signature="e#64#99#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
