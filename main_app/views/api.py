@@ -522,21 +522,21 @@ def proxy_account_change_password(request): #Done
 代理设置广告
 url: http://127.0.0.1:8000/api/proxy_account_ad_change/?token=d6t7rd8l0j0z4p1&ad=testtest
 参数：
-token 代理客户login函数成功后返回的密链，每个账号都有一个独立的密链，并且每次登陆后都会返回一个新的密链
+TOKEN 代理客户login函数成功后返回的密链，每个账号都有一个独立的密链，并且每次登陆后都会返回一个新的密链
 ad 需要设置的广告（15字以内）
 返回值：
 "success" 修改成功
-"Error, account is Not exsited or token is fail" 如果token错误或账户不存在都返回此警告
+"Error, account is Not exsited or TOKEN is fail" 如果token错误或账户不存在都返回此警告
 "Error,bad request method POST" 错误的请求模式
 """
 def proxy_account_ad_change(request): #Done
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
-    token = request.GET['token']
+    TOKEN = request.GET['token']
     ad = request.GET['ad']
-    user = get_proxy_account(TOKEN=token)
+    user = get_proxy_account(TOKEN=TOKEN)
     if not user:
-        return dump_and_response("Error, account is Not exsited or token is fail")
+        return dump_and_response("Error, account is Not exsited or TOKEN is fail")
     user[1].ad = ad
     user[1].save()
     return dump_and_response("success")
@@ -595,17 +595,17 @@ def web_test(request):
 
 """
 代理提卡
-url:http://127.0.0.1:8000/api/proxy_get_software_code/?token=w5M3r4U6P7t8dU0&HowMuch=3&software_id=1
+url:http://127.0.0.1:8000/api/proxy_get_software_code/?TOKEN=w5M3r4U6P7t8dU0&HowMuch=3&software_id=1
 
 参数：
-token 代理账户密链
+TOKEN 代理账户密链
 software_id 软件ID
 HowMuch 提多少张
 
 返回值：
 ["n7o7I7M3I4", "r6X7D6O5g1", "c0Z4b3s6F7"] 如果成功，将返回一个列表
 "Error, HowMuch lower than 0" 提卡数量小于或等于0
-"Error, account is Not exsited or token is fail" 如果token错误或账户不存在都返回此警告
+"Error, account is Not exsited or TOKEN is fail" 如果token错误或账户不存在都返回此警告
 "Error,bad request method POST" 错误的请求模式
 "software_id do not excited" 软件不存在或软件ID错误
 ["Balance not enough!","100"] 如果余额不足以提卡，就会返回第一个是提示，第二个是目前的余额
@@ -614,11 +614,11 @@ HowMuch 提多少张
 def proxy_get_software_code(request): #已测试
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
-    token = request.GET['token']
-    user = get_proxy_account(TOKEN=token)
+    TOKEN = request.GET['TOKEN']
+    user = get_proxy_account(TOKEN=TOKEN)
     #检查密链
     if not user:
-        return dump_and_response("Error, account is Not exsited or token is fail")
+        return dump_and_response("Error, account is Not exsited or TOKEN is fail")
     #判断获取个数，并检查是否小于等于0
     howmuch = int(request.GET['HowMuch'])
     if howmuch <= 0:
@@ -742,7 +742,7 @@ def authorization_make(request): #已测试
         return dump_and_response(["success", convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S")])
 
 """
-授权查询
+授权查询 （软件使用）
 url:http://127.0.0.1:8000/api/authorization_check/?software_id=1&bot_QQ=123123
 
 参数：
@@ -783,7 +783,7 @@ def authorization_check(request): #Done
         return dump_and_response(["success",convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S"),proxy_man_others_info.ad])
 
 """
-更换授权机器人QQ
+更换授权机器人QQ （软件使用）
 url:http://127.0.0.1:8000/api/authorization_change/?software_id=1&new_bot_QQ=1414&customer_QQ=123123
 
 参数：
@@ -812,4 +812,116 @@ def authorization_change(request): #已测试
     authorization.bot_QQ = new_bot_QQ
     authorization.save()
     return dump_and_response(["success",authorization.bot_QQ])
+
+"""
+代理开下级账户
+url:
+
+
+参数:
+TOKEN = 代理账户TOKEN
+proxy_username = 下级代理账户名
+proxy_password = 下级代理密码
+proxy_ad = 下级代理广告（不写就是为空字符串)
+proxy_level = 下级代理等级（只能够填写小于当前开户级别的代理级别）
+
+返回值:
+"success" 成功创建
+"Fail,proxy_level is not allow" 下级代理账号等级高于本账户等级，或小于0
+"Fail,account already existed" 账户已存在
+"Error, account is Not exsited or token is fail" TOKEN值验证失败
+"Error, bad request method POST" 错误的请求方式
+"""
+
+def proxy_open_new_account(request):
+    if request.method is "POST":
+        return dump_and_response("Error, bad request method POST")
+    TOKEN = request.GET["TOKEN"] #获取TOKEN
+    user = get_proxy_account(TOKEN=TOKEN)
+    #检查密链
+    if not user:
+        return dump_and_response("Error, account is Not exsited or token is fail")
+    proxy_username = request.GET['proxy_username']
+    proxy_password = request.GET['proxy_password']
+    try:
+        proxy_ad = request.GET['proxy_ad']
+    except:
+        proxy_ad = ''
+    proxy_level = int(request.GET['proxy_level'])
+    try:
+        User.objects.get_by_natural_key(username=proxy_username)
+        return dump_and_response("Fail,account already existed")
+    except:
+        pass
+    if proxy_level >= user[1].level or proxy_level < 0:
+        return dump_and_response("Fail,proxy_level is not allow")
+    up_proxy = user[0].id
+    #开户
+    new_user = authenticate(username = proxy_username,password = proxy_password)
+    if new_user is None:
+        new_user = User.objects.create_user(username=proxy_username,password=proxy_password)
+        user_others_info = Others_info.objects.create(user=new_user,ad=proxy_ad,TOKEN=get_TOKEN(),level=proxy_level,up_proxy=up_proxy)
+        new_user.save()
+        user_others_info.save()
+        return dump_and_response("Success")
+    else:
+        return dump_and_response("Fail,account already existed")
+
+"""
+代理向下级转账（仅限上级向下级转账，其他都不可行）
+
+url:
+
+参数：
+TOKEN 代理账号的密链
+proxy_name  收款的账户用户名
+money 需要转账的数额
+
+返回值：
+["success", "12161.25"] 第一个是成功，第二个是目前账号余额
+"Error, bad request method POST" 错误的
+"Error, account is Not exsited or token is fail" 账号密链错误
+"Error, proxy_name is wrong!" 收款的账户用户名错误！
+"Error, Not allow to transfer others accounts!" 禁止转账给非下级代理
+"Your balance not enought!" 你的余额不足
+"""
+
+def proxy_transfer_money(request):
+    if request.method is "POST":
+        return dump_and_response("Error, bad request method POST")
+    TOKEN = request.GET["TOKEN"] #获取TOKEN
+    user = get_proxy_account(TOKEN=TOKEN)
+    #检查密链
+    if not user:
+        return dump_and_response("Error, account is Not exsited or token is fail")
+
+    down_user = get_proxy_account(username=request.GET['proxy_name'])
+    if not down_user:
+        return dump_and_response("Error, proxy_name is wrong!")
+    if down_user[1].up_proxy != user[0].id:
+        return dump_and_response("Error, Not allow to transfer others accounts!")
+
+    money = Decimal(request.GET['money'])
+    if user[1].balance - money < 0:
+        return dump_and_response("Your balance not enought!")
+
+    user[1].balance -= money #扣款
+    user[1].save()
+    user_record = Deal_record.objects.create(deal_code=get_deal_code(5),acount=user[0],money=money,symbol=False,notes="通过API转账给"+down_user[0].username)
+    user_record.save() #保存完
+
+    down_user[1].balance += money
+    down_user[1].save()
+    down_user_record = Deal_record.objects.create(deal_code=get_deal_code(5),acount=down_user[0],money=money,symbol=True,notes="来自用户："+user[0].username+"的转账")
+    down_user_record.save()
+
+    return dump_and_response(["success","%.2f" % user[1].balance])
+
+
+
+
+
+
+
+
 

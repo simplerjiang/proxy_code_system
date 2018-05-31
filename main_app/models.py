@@ -74,7 +74,14 @@ class Software(models.Model):
     def __str__(self):
         return self.software_name+"  软件ID:"+str(self.software_id)
 
-
+class Getmoney(models.Model):
+    time = models.DateTimeField(verbose_name="申请时间",auto_now_add=True)
+    proxy_account = models.ForeignKey(User,verbose_name="代理账号对象")
+    money = models.PositiveIntegerField(verbose_name="提现金额",default=0)
+    money_account_name = models.CharField(verbose_name="提现账号种类",max_length=100)#微信,支付宝，QQ
+    money_account_num = models.CharField(verbose_name="提现账号",max_length=100)
+    flag = models.BooleanField(verbose_name="是否完成提现",default=False)
+    finished_time = models.DateTimeField(verbose_name="完成时间",auto_now=True)
 
 class Deal_record(models.Model):
     time = models.DateTimeField(verbose_name="交易时间",auto_now_add=True)

@@ -1,4 +1,9 @@
-﻿
+﻿#代理网站API系统
+** 全部API均使用GET方式请求，使用POST会返回错误提示！**
+** 所有API都写于main_app/views/api.py 下 **
+
+
+
 ## 代理账户开户API
 url:http://127.0.0.1:8000/api/admin_proxy_account_add_api/?admin_code=testtest&proxy_username=Kong4&proxy_password=testtest&proxy_ad=测试广告&proxy_balance=88
 #### 参数:
@@ -497,7 +502,61 @@ customer_QQ 客户QQ
 
 ---
 
+##代理开下级账户
 
+url:http://127.0.0.1:8000/api/proxy_open_new_account/?TOKEN=XXXXXXXXXXXXX&proxy_username=XXXX&proxy_password=XXXXX&proxy_ad=广告&proxy_level=10
+
+####参数:
+
+TOKEN = 代理账户TOKEN
+
+proxy_username = 下级代理账户名
+
+proxy_password = 下级代理密码
+
+proxy_ad = 下级代理广告（不写就是为空字符串)
+
+proxy_level = 下级代理等级（只能够填写小于当前开户级别的代理级别）
+
+####返回值:
+
+"success" 成功创建
+
+"Fail,proxy_level is not allow" 下级代理账号等级高于本账户等级，或小于0
+
+"Fail,account already existed" 账户已存在
+
+"Error, account is Not exsited or token is fail" TOKEN值验证失败
+
+"Error, bad request method POST" 错误的请求方式
+
+
+---
+##代理向下级转账（仅限上级向下级转账，其他都不可行）
+
+url:http://127.0.0.1:8000/api/proxy_transfer_money/?TOKEN=XXXXXXXXXXXX&proxy_name=XXXX&money=10
+
+####参数：
+
+TOKEN 代理账号的密链
+
+proxy_name  收款的账户用户名
+
+money 需要转账的数额
+
+####返回值：
+
+["success", "12161.25"] 第一个是成功，第二个是目前账号余额
+
+"Error, bad request method POST" 错误的
+
+"Error, account is Not exsited or token is fail" 账号密链错误
+
+"Error, proxy_name is wrong!" 收款的账户用户名错误！
+
+"Error, Not allow to transfer others accounts!" 禁止转账给非下级代理
+
+"Your balance not enought!" 你的余额不足
 
 
 
