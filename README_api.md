@@ -502,11 +502,11 @@ customer_QQ 客户QQ
 
 ---
 
-##代理开下级账户
+## 代理开下级账户
 
 url:http://127.0.0.1:8000/api/proxy_open_new_account/?TOKEN=XXXXXXXXXXXXX&proxy_username=XXXX&proxy_password=XXXXX&proxy_ad=广告&proxy_level=10
 
-####参数:
+#### 参数:
 
 TOKEN = 代理账户TOKEN
 
@@ -518,7 +518,7 @@ proxy_ad = 下级代理广告（不写就是为空字符串)
 
 proxy_level = 下级代理等级（只能够填写小于当前开户级别的代理级别）
 
-####返回值:
+#### 返回值:
 
 "success" 成功创建
 
@@ -533,11 +533,11 @@ proxy_level = 下级代理等级（只能够填写小于当前开户级别的代
 
 ---
 
-##代理向下级转账（仅限上级向下级转账，其他都不可行）
+## 代理向下级转账（仅限上级向下级转账，其他都不可行）
 
 url:http://127.0.0.1:8000/api/proxy_transfer_money/?TOKEN=XXXXXXXXXXXX&proxy_name=XXXX&money=10
 
-####参数：
+#### 参数：
 
 TOKEN 代理账号的密链
 
@@ -545,7 +545,7 @@ proxy_name  收款的账户用户名
 
 money 需要转账的数额
 
-####返回值：
+#### 返回值：
 
 ["success", "12161.25"] 第一个是成功，第二个是目前账号余额
 
@@ -561,11 +561,11 @@ money 需要转账的数额
 
 ---
 
-##代理申请提现（提现金额必须大于10)
+## 代理申请提现（提现金额必须大于10)
 
 url:http://127.0.0.1:8000/api/proxy_get_out_money/?TOKEN=123ddd&money_account_name=支付宝&money=100&money_account_num=130000000
 
-####参数：
+#### 参数：
 
 TOKEN
 
@@ -577,7 +577,7 @@ money_account_num 提现账号名（手机号或邮箱号）
 
 money_account_name 户主名 （用于验证收款账号是否正确）
 
-####返回值：
+#### 返回值：
 
 "success, please wait" 提现申请成功，请等待
 
