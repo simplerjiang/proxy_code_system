@@ -1,6 +1,7 @@
-﻿#代理网站API系统
-** 全部API均使用GET方式请求，使用POST会返回错误提示！**
-** 所有API都写于main_app/views/api.py 下 **
+﻿# 代理网站API系统
+
+##### 全部API均使用GET方式请求，使用POST会返回错误提示！
+##### 所有API都写于main_app/views/api.py 下 
 
 
 

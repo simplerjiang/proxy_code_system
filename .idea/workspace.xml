@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="eca19ce4-9dce-47c8-aee5-d280f6e4a014" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/templates/add_down_proxy.html" afterPath="$PROJECT_DIR$/templates/add_down_proxy.html" />
-    </list>
+    <list default="true" id="eca19ce4-9dce-47c8-aee5-d280f6e4a014" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
