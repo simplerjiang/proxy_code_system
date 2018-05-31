@@ -815,7 +815,7 @@ def authorization_change(request): #已测试
 
 """
 代理开下级账户
-url:
+url:http://127.0.0.1:8000/api/proxy_transfer_money/?TOKEN=XXXXXX&proxy_username=XXXX&proxy_password=XXXXXX&proxy_ad=广告&proxy_level=XXXX
 
 
 参数:
@@ -870,7 +870,7 @@ def proxy_open_new_account(request):
 """
 代理向下级转账（仅限上级向下级转账，其他都不可行）
 
-url:
+url:http://127.0.0.1:8000/api/proxy_transfer_money/?TOKEN=XXXXXXXX&proxy_name=XXXX&money=100
 
 参数：
 TOKEN 代理账号的密链
@@ -917,6 +917,69 @@ def proxy_transfer_money(request):
 
     return dump_and_response(["success","%.2f" % user[1].balance])
 
+
+"""
+代理申请提现（提现金额必须大于10)
+
+url:http://127.0.0.1:8000/api/proxy_get_out_money/?TOKEN=123ddd&money_account_name=支付宝&money=100&money_account_num=130000000
+
+参数：
+TOKEN
+money 提现金额 （输入-1等于提现所有金额）
+money_account_name 提现方式（必须为特定名字，"支付宝" "QQ" "微信"，如果不是会返回错误）
+money_account_num 提现账号名（手机号或邮箱号）
+
+返回值：
+"success, please wait" 提现申请成功，请等待
+"Error, money is lower than 10!" 提现金额过少，必须大于0 
+"Error, money_account_name is wrong!" 提现方式错误（必须为特定名字，"支付宝" "QQ" "微信"，如果不是会返回错误）
+"Error, bad request method POST" 错误的
+"Error, account is Not exsited or token is fail" 账号密链错误
+"Error, money is wrong!" 金额设置错误，可能是低于0元，注意 -1是否为英文符号
+"Balance is not enought" 账户余额不足
+"""
+
+def proxy_get_out_money(request):
+    if request.method is "POST":
+        return dump_and_response("Error, bad request method POST")
+    TOKEN = request.GET["TOKEN"] #获取TOKEN
+    user = get_proxy_account(TOKEN=TOKEN)
+    #检查密链
+    if not user:
+        return dump_and_response("Error, account is Not exsited or token is fail")
+
+    money_account_name = request.GET['money_account_name']
+    money_account_num = request.GET['money_account_num']
+    money = Decimal(request.GET['money'])
+    if money < 10 and money != -1:
+        return dump_and_response("Error, money is lower than 10!")
+    if money_account_name not in ["支付宝","QQ","微信"]:
+        return dump_and_response("Error, money_account_name is wrong!")
+    if money == -1:
+        if user[1].balance < 10:
+            return dump_and_response("Balance is not enought")
+        else:
+            money = user[1].balance
+            user[1].balance = 0
+            user[1].save()
+            deal_record_object =  Deal_record.objects.create(deal_code=get_deal_code(5),acount=user[0],money=money,symbol=False,notes="API操作申请提现")
+            deal_record_object.save()
+            get_money_object = Getmoney.objects.create(proxy_account=user[0],money=money,money_account_name=money_account_name,money_account_num=money_account_num)
+            get_money_object.save()
+            return dump_and_response("success, please wait")
+    elif money > 0:
+        if user[1].balance - money < 0:
+            return dump_and_response("Balance is not enought")
+        else:
+            user[1].balance -= money
+            user[1].save()
+            deal_record_object =  Deal_record.objects.create(deal_code=get_deal_code(5),acount=user[0],money=money,symbol=False,notes="API操作申请提现")
+            deal_record_object.save()
+            get_money_object = Getmoney.objects.create(proxy_account=user[0],money=money,money_account_name=money_account_name,money_account_num=money_account_num)
+            get_money_object.save()
+            return dump_and_response("success, please wait")
+    else:
+        return dump_and_response("Error, money is wrong!")
 
 
 

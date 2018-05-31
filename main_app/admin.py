@@ -11,6 +11,7 @@ admin.site.register(Software)
 admin.site.register(Notice)
 admin.site.register(Question)
 admin.site.register(Deal_record)
+admin.site.register(Getmoney)
 # Register your models here.
 
 class OtherInfoInline(admin.StackedInline):

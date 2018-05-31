@@ -82,7 +82,11 @@ class Getmoney(models.Model):
     money_account_num = models.CharField(verbose_name="提现账号",max_length=100)
     flag = models.BooleanField(verbose_name="是否完成提现",default=False)
     finished_time = models.DateTimeField(verbose_name="完成时间",auto_now=True)
-
+    def __str__(self):
+        if self.flag == False:
+            return "未完成！    用户：" + self.proxy_account.username + "   金额：" + "%.2f" % self.money + "   方式：" + self.money_account_name + "  提现账户：" + self.money_account_num
+        else:
+            return "已完成！    用户：" + self.proxy_account.username + "   金额：" + "%.2f" % self.money + "   方式：" + self.money_account_name + "  提现账户：" + self.money_account_num
 class Deal_record(models.Model):
     time = models.DateTimeField(verbose_name="交易时间",auto_now_add=True)
     deal_code = models.CharField(verbose_name="交易编号",max_length=5)

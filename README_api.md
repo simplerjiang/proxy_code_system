@@ -558,5 +558,36 @@ money 需要转账的数额
 
 "Your balance not enought!" 你的余额不足
 
+---
+
+##代理申请提现（提现金额必须大于10)
+
+url:http://127.0.0.1:8000/api/proxy_get_out_money/?TOKEN=123ddd&money_account_name=支付宝&money=100&money_account_num=130000000
+
+####参数：
+
+TOKEN
+
+money 提现金额 （输入-1等于提现所有金额）
+
+money_account_name 提现方式（必须为特定名字，"支付宝" "QQ" "微信"，如果不是会返回错误）
+
+money_account_num 提现账号名（手机号或邮箱号）
+
+####返回值：
+
+"success, please wait" 提现申请成功，请等待
+
+"Error, money is lower than 10!" 提现金额过少，必须大于0 
+
+"Error, money_account_name is wrong!" 提现方式错误（必须为特定名字，"支付宝" "QQ" "微信"，如果不是会返回错误）
+
+"Error, bad request method POST" 错误的
+
+"Error, account is Not exsited or token is fail" 账号密链错误
+
+"Error, money is wrong!" 金额设置错误，可能是低于0元，注意 -1是否为英文符号
+
+"Balance is not enought" 账户余额不足
 
 

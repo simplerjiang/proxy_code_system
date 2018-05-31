@@ -41,6 +41,7 @@ urlpatterns = [
     url(r'^api/authorization_change/$',authorization_change,name='authorization_change'),
     url(r'api/proxy_open_new_account/$',proxy_open_new_account,name='proxy_open_new_account'),
     url(r'api/proxy_transfer_money/$',proxy_transfer_money,name='proxy_transfer_money'),
+    url(r'api/proxy_get_out_money/$',proxy_get_out_money,name='proxy_get_out_money'),
     url(r'^$',index_page,name='index'),
     url(r'^accounts/login/$',login_view,name='login'),
     url(r'^accounts/logout/$',log_out_view,name='logout'),
