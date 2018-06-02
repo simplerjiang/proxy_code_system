@@ -11,10 +11,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='software_cost',
-            name='software',
-        ),
         migrations.AddField(
             model_name='software',
             name='software_cost',
@@ -24,8 +20,5 @@ class Migration(migrations.Migration):
             model_name='software',
             name='software_each_time',
             field=models.PositiveIntegerField(verbose_name='套餐时间（按小时计算）', default=720),
-        ),
-        migrations.DeleteModel(
-            name='Software_cost',
         ),
     ]
