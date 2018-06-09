@@ -14,6 +14,7 @@ import decimal
 from .time_deal import *
 import django.utils.timezone as timezone
 from decimal import *
+from django.conf import settings
 
 def dump_and_response(data): #checked
     return HttpResponse(json.dumps(data), content_type="application/json")
@@ -785,7 +786,7 @@ def authorization_check(request): #Done
     else:
         if authorization.proxy_man == None:
             return dump_and_response(
-                ["try_success", convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S")])
+                ["try_success", convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S"),settings.TAIL])
         proxy_man_others_info = Others_info.objects.get(user=authorization.proxy_man)
         return dump_and_response(["success",convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S"),proxy_man_others_info.ad])
 
