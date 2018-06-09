@@ -754,6 +754,7 @@ bot_QQ 机器人QQ
 ["try_success","2018-05-06 15:01:35"] 如果是试用，则返回此内容，不返回代理广告
 "Fail" 已过期或不存在
 "Error,bad request method POST" 错误的请求模式
+"Software_id Wrong!" software_id错误
 """
 def authorization_check(request): #Done
     if request.method is "POST":
@@ -763,7 +764,10 @@ def authorization_check(request): #Done
     try:
         software = Software.objects.get(software_id=int(software_id))
         authorization = Authorization.objects.get(software=software,bot_QQ=int(bot_QQ))
-    except:
+    except Software.DoesNotExist:
+        return dump_and_response("Software_id Wrong!")
+
+    except Authorization.DoesNotExist:
         if software.software_try == True:
             #开始试用。
             authorization = Authorization.objects.create(software=software,
