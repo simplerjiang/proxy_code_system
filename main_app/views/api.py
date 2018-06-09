@@ -783,6 +783,9 @@ def authorization_check(request): #Done
     if authorization.deadline_time < timezone.now():
         return dump_and_response('Fail')
     else:
+        if authorization.proxy_man == None:
+            return dump_and_response(
+                ["try_success", convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S")])
         proxy_man_others_info = Others_info.objects.get(user=authorization.proxy_man)
         return dump_and_response(["success",convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S"),proxy_man_others_info.ad])
 
