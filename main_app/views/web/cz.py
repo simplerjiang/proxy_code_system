@@ -41,6 +41,7 @@ def make_auth(request):
 
         software = code_object.software
         time_long = code_object.time
+        proxy_man = code_object.proxy_man
 
 
         try:
@@ -52,6 +53,7 @@ def make_auth(request):
 
             authorization.customer_QQ = customer_QQ #再重新设立主人id,以防止某些查询的时候遇到试用授权的
             authorization.deadline_time = authorization.deadline_time + datetime.timedelta(hours=time_long)
+            authorization.proxy_man = proxy_man
             authorization.save()
             code_object.used = True
             code_object.save()
