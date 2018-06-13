@@ -59,6 +59,8 @@ urlpatterns = [
     url(r'^create_new_down_account/$',create_new_down_account,name='create_new_down_account'),
     url(r'^get_money/$',get_money,name='get_money'),
     url(r'^transfer/$',transfer,name='transfer'),
+    url(r'^make_auth/$', make_auth, name='make_auth'),
+    url(r'^change_bot_qq/$', change_bot_qq, name='change_bot_qq'),
 ]
 
 urlpatterns +=patterns('',

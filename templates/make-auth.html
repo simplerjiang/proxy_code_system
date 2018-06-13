@@ -1,0 +1,103 @@
+{% load staticfiles %}
+<html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static "images/favicon.png"%}">
+    <title>使用卡密 -- 软件授权后台</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static "css/lib/bootstrap/bootstrap.min.css"%}" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{% static "css/helper.css"%}" rel="stylesheet">
+    <link href="{% static "css/style.css"%}" rel="stylesheet">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:** -->
+    <!--[if lt IE 9]>
+    <script src="{% static "js/html5shiv.js"%}"></script>
+    <script src="{% static "js/respond.min.js"%}"></script>
+<![endif]-->
+</head>
+
+<body class="fix-header fix-sidebar">
+    <!-- Preloader - style you can find in spinners.css -->
+
+    <!-- Main wrapper  -->
+    <div id="main-wrapper">
+
+        <div class="unix-login">
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-lg-4">
+                        <div class="login-content card">
+                            <div class="login-form">
+                                <h4>使用卡密</h4>
+                                {% if warn %}
+                                <div class="alert alert-danger alert-dismissible fade show">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                    <strong>警告！</strong> {{ warn }}
+                                </div>
+                                {% endif %}
+                                {% if success %}
+                                <div class="alert alert-success alert-dismissible fade show">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                    <strong>成功！</strong> {{ success }}
+                                </div>
+                                {% endif %}
+                                <form  action="{% url "make_auth" %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label>卡密</label>
+                                        <input type="text" class="form-control" value="{{ software_code }}" placeholder="请输入卡密" name="software_code">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>主人QQ号</label>
+                                        <input type="text" class="form-control" value="{{ customer_QQ }}" placeholder="用于日后更换机器人QQ号" name="customer_QQ">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>机器人QQ号</label>
+                                        <input type="text" class="form-control" value="{{ bot_QQ }}" placeholder="请输入需要使用的机器人QQ号" name="bot_QQ">
+                                    </div>
+                                    <div class="checkbox">
+                                        <label class="pull-right">
+        										<a href="#">需要帮助？</a>
+        									</label>
+
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30">点击提交</button>
+                                    <div class="register-link m-t-15 text-center">
+                                        <p>需要修改授权 ? <a href="{% url "change_bot_qq" %}"> 点击此处修改</a></p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- End Wrapper -->
+    <!-- All Jquery -->
+    <script src="{% static "js/lib/jquery/jquery.min.js"%}"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="{% static "js/lib/bootstrap/js/popper.min.js"%}"></script>
+    <script src="{% static "js/lib/bootstrap/js/bootstrap.min.js"%}"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="{% static "js/jquery.slimscroll.js"%}"></script>
+    <!--Menu sidebar -->
+    <script src="{% static "js/sidebarmenu.js"%}"></script>
+    <!--stickey kit -->
+    <script src="{% static "js/lib/sticky-kit-master/dist/sticky-kit.min.js"%}"></script>
+    <!--Custom JavaScript -->
+    <script src="{% static "js/custom.min.js"%}"></script>
+
+</body>
+
+</html>
