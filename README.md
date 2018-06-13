@@ -3,7 +3,57 @@
 ---
 ## 网页展示
 
+#### 主页（代理账户后台）
+
 ![主页](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/index.png)
+
+#### 登陆页面
+
+![登陆页面](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/login.png)
+
+#### 注册页面
+
+![注册页面](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/reg.png)
+
+#### 购买软件卡密页面
+
+![购买软件卡密页面](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/software_list.png)
+
+![选择数量](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/buy_item.png)
+
+#### 提卡卡密
+
+![提取卡密](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/get_code_list.png)
+
+#### 余额不足页面（所有错误页面都有，但是我没截图）
+
+![余额不足](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/wrong.png)
+
+#### 个人资料修改页面
+
+![个人资料](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/profile.png)
+
+#### 转账页面
+
+![转账](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/transfer.png)
+
+#### 管理下级代理
+
+![管理下级](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/contorl_down_proxy.png)
+
+#### 管理授权
+
+![管理授权](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/contorl_auth.png)
+
+#### 网站管理员登陆
+
+![网站管理员](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/admin_login.png)
+
+#### 网站管理员页面
+
+![网站管理员页面](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/admin_control.png)
+
+
 
 ---
 
