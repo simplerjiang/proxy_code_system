@@ -106,7 +106,7 @@ class Authorization(models.Model):
     deadline_time = models.DateTimeField(verbose_name="到期时间",default=timezone.now)
 
     def __str__(self):
-        return software.software_name + " 机器人QQ: " + str(bot_QQ)
+        return self.software.software_name + " 机器人QQ: " + str(self.bot_QQ)
 
 
 class Time_code(models.Model):
