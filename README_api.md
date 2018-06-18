@@ -470,7 +470,6 @@ bot_QQ 机器人QQ
 "Error,bad request method POST" 错误的请求模式
 
 
-
 ---
 
 
@@ -487,6 +486,8 @@ software_id 软件id
 
 new_bot_QQ 新机器人QQ
 
+old_bot_QQ 旧机器人QQ
+
 customer_QQ 客户QQ 
 
 
@@ -498,6 +499,8 @@ customer_QQ 客户QQ
 "Error,bad request method POST" 错误的请求模式
 
 "Fail" 授权不存在或过期
+
+"Wrong QQ Type" 错误的QQ类型，就是说它不是数字
 
 
 

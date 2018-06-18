@@ -764,11 +764,13 @@ def authorization_check(request): #Done
     bot_QQ = request.GET['bot_QQ']
     customer_QQ = request.GET['customer_QQ']
     try:
+        software_id = int(software_id)
         bot_QQ = int(bot_QQ)
+        customer_QQ = it(customer_QQ)
     except ValueError:
         return dump_and_response("Fail")
     try:
-        software = Software.objects.get(software_id=int(software_id))
+        software = Software.objects.get(software_id=software_id)
         authorization = Authorization.objects.get(software=software,bot_QQ=bot_QQ)
     except Software.DoesNotExist:
         return dump_and_response("Software_id Wrong!")
@@ -778,7 +780,7 @@ def authorization_check(request): #Done
             #开始试用。
             authorization = Authorization.objects.create(software=software,
                                                          customer_QQ=0,
-                                                         bot_QQ=int(bot_QQ),
+                                                         bot_QQ=bot_QQ,
                                                          )
             authorization.save()
             authorization.deadline_time = authorization.deadline_time + datetime.timedelta(hours=software.software_try_hours)
@@ -797,7 +799,7 @@ def authorization_check(request): #Done
 
 """
 更换授权机器人QQ （软件使用）
-url:http://127.0.0.1:8000/api/authorization_change/?software_id=1&new_bot_QQ=1414&customer_QQ=123123
+url:http://127.0.0.1:8000/api/authorization_change/?software_id=1&new_bot_QQ=1414&customer_QQ=123123&old_bot_QQ=1234
 
 参数：
 software_id 软件id
@@ -818,11 +820,12 @@ def authorization_change(request): #已测试
     try:
         new_bot_QQ = int(request.GET['new_bot_QQ'])
         customer_QQ = int(request.GET['customer_QQ'])
+        software_id = int(software_id)
         old_bot_QQ = int(request.GET['old_bot_QQ'])
     except ValueError:
         return dump_and_response("Wrong QQ Type")
     try:
-        software = Software.objects.get(software_id=int(software_id))
+        software = Software.objects.get(software_id=software_id)
         authorization = Authorization.objects.get(software=software,customer_QQ=customer_QQ,bot_QQ=old_bot_QQ)
     except Authorization.DoesNotExist:
         return dump_and_response("Fail")
