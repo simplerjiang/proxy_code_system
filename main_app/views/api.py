@@ -762,11 +762,9 @@ def authorization_check(request): #Done
         return dump_and_response("Error, bad request method POST")
     software_id = request.GET['software_id']
     bot_QQ = request.GET['bot_QQ']
-    customer_QQ = request.GET['customer_QQ']
     try:
         software_id = int(software_id)
         bot_QQ = int(bot_QQ)
-        customer_QQ = it(customer_QQ)
     except ValueError:
         return dump_and_response("Fail")
     try:
