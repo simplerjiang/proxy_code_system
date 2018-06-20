@@ -783,7 +783,7 @@ def authorization_check(request): #Done
             authorization.save()
             authorization.deadline_time = authorization.deadline_time + datetime.timedelta(hours=software.software_try_hours)
             authorization.save()
-            return dump_and_response(["try_success",convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S")])
+            return dump_and_response(["try_success",convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S"),settings.TAIL])
         else:
             return dump_and_response('Fail')
     if authorization.deadline_time < timezone.now():
