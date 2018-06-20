@@ -763,8 +763,13 @@ def authorization_check(request): #Done
     software_id = request.GET['software_id']
     bot_QQ = request.GET['bot_QQ']
     try:
-        software = Software.objects.get(software_id=int(software_id))
-        authorization = Authorization.objects.get(software=software,bot_QQ=int(bot_QQ))
+        software_id = int(software_id)
+        bot_QQ = int(bot_QQ)
+    except ValueError:
+        return dump_and_response("Fail")
+    try:
+        software = Software.objects.get(software_id=software_id)
+        authorization = Authorization.objects.get(software=software,bot_QQ=bot_QQ)
     except Software.DoesNotExist:
         return dump_and_response("Software_id Wrong!")
 
@@ -773,7 +778,7 @@ def authorization_check(request): #Done
             #开始试用。
             authorization = Authorization.objects.create(software=software,
                                                          customer_QQ=0,
-                                                         bot_QQ=int(bot_QQ),
+                                                         bot_QQ=bot_QQ,
                                                          )
             authorization.save()
             authorization.deadline_time = authorization.deadline_time + datetime.timedelta(hours=software.software_try_hours)
@@ -792,34 +797,41 @@ def authorization_check(request): #Done
 
 """
 更换授权机器人QQ （软件使用）
-url:http://127.0.0.1:8000/api/authorization_change/?software_id=1&new_bot_QQ=1414&customer_QQ=123123
+url:http://127.0.0.1:8000/api/authorization_change/?software_id=1&new_bot_QQ=1414&customer_QQ=123123&old_bot_QQ=1234
 
 参数：
 software_id 软件id
 new_bot_QQ 新机器人QQ
+old_bot_QQ 旧机器人QQ
 customer_QQ 客户QQ 
 
 返回值：
 ["success","1414"] 如果修改成功，第二个返回目前的机器人QQ
 "Error,bad request method POST" 错误的请求模式
 "Fail" 授权不存在或过期
+"Wrong QQ Type" 错误的QQ类型，就是说它不是数字
 """
 def authorization_change(request): #已测试
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
     software_id = request.GET['software_id']
-    new_bot_QQ = int(request.GET['new_bot_QQ'])
-    customer_QQ = int(request.GET['customer_QQ'])
     try:
-        software = Software.objects.get(software_id=int(software_id))
-        authorization = Authorization.objects.get(software=software,customer_QQ=customer_QQ)
+        new_bot_QQ = int(request.GET['new_bot_QQ'])
+        customer_QQ = int(request.GET['customer_QQ'])
+        software_id = int(software_id)
+        old_bot_QQ = int(request.GET['old_bot_QQ'])
+    except ValueError:
+        return dump_and_response("Wrong QQ Type")
+    try:
+        software = Software.objects.get(software_id=software_id)
+        authorization = Authorization.objects.get(software=software,customer_QQ=customer_QQ,bot_QQ=old_bot_QQ)
     except Authorization.DoesNotExist:
         return dump_and_response("Fail")
     if authorization.deadline_time < timezone.now():
         return dump_and_response('Fail')
     authorization.bot_QQ = new_bot_QQ
     authorization.save()
-    return dump_and_response(["success",authorization.bot_QQ])
+    return dump_and_response(["success",str(authorization.bot_QQ)])
 
 """
 代理开下级账户
