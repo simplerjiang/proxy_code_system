@@ -810,6 +810,7 @@ customer_QQ 客户QQ
 "Error,bad request method POST" 错误的请求模式
 "Fail" 授权不存在或过期
 "Wrong QQ Type" 错误的QQ类型，就是说它不是数字
+"Exist more then one auth" 新机器人QQ已存在，请更换
 """
 def authorization_change(request): #已测试
     if request.method is "POST":
@@ -829,9 +830,13 @@ def authorization_change(request): #已测试
         return dump_and_response("Fail")
     if authorization.deadline_time < timezone.now():
         return dump_and_response('Fail')
-    authorization.bot_QQ = new_bot_QQ
-    authorization.save()
-    return dump_and_response(["success",str(authorization.bot_QQ)])
+    try:
+        Authorization.objects.get(bot_QQ=new_bot_QQ,software=software)
+        return dump_and_response("Exist more then one auth")
+    except Authorization.DoesNotExist:
+        authorization.bot_QQ = new_bot_QQ
+        authorization.save()
+        return dump_and_response(["success",str(authorization.bot_QQ)])
 
 """
 代理开下级账户

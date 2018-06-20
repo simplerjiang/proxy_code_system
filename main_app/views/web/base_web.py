@@ -301,19 +301,39 @@ def check_auth(request,pk):
             return render(request,'auth-detail.html',context=context)
         except Authorization.DoesNotExist:
             raise Http404("未找到！错误！")
+
     elif request.method == "POST":
         context ={"pk":pk}
+        qq = request.POST['qq']
+        try:
+            qq = int(qq)
+        except ValueError:
+            context['warn'] = "QQ不正确"
+            try:
+                auth = Authorization.objects.get(pk=pk)
+                if auth.proxy_man != request.user:
+                    raise Http404("此授权不属于此账户！")
+
+            except Authorization.DoesNotExist:
+                raise Http404("找不到！错误！")
+            context['auth'] = auth
+            return render(request,"auth-detail.html", context = context)
+
         try:
             auth = Authorization.objects.get(pk=pk)
-            if auth.proxy_man != request.user:
-                raise Http404("此授权不属于此账户！")
-            elif str(auth.bot_QQ) != request.POST['qq']:
-                auth.bot_QQ = request.POST['qq']
-                auth.save()
-                context['success'] = "机器人QQ修改成功！"
-
         except Authorization.DoesNotExist:
             raise Http404("找不到！错误！")
+        if auth.proxy_man != request.user:
+            raise Http404("此授权不属于此账户！")
+        try:
+            Authorization.objects.get(bot_QQ=qq, software=auth.software)
+            context['auth'] = auth
+            context['warn'] = "新的机器人QQ已经存在，请尝试其他Q号或联系管理员"
+        except Authorization.DoesNotExist:
+            if auth.bot_QQ != qq:
+                auth.bot_QQ = qq
+                auth.save()
+                context['success'] = "机器人QQ修改成功！"
         context['auth'] = auth
         return render(request, 'auth-detail.html', context=context)
 

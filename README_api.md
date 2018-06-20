@@ -502,7 +502,7 @@ customer_QQ 客户QQ
 
 "Wrong QQ Type" 错误的QQ类型，就是说它不是数字
 
-
+"Exist more then one auth" 新机器人QQ已存在，请更换
 
 ---
 

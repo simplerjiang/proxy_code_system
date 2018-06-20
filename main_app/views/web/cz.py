@@ -121,10 +121,15 @@ def change_bot_qq(request):
             context ={"warn":"新旧机器人QQ相同！请重试","software_list":software_list,"customer_QQ":customer_QQ,"obot_QQ":obot_QQ,"bot_QQ":bot_QQ}
             return render(request,"change-auth.html",context)
 
-        auth_object.bot_QQ == bot_QQ
-        auth_object.save()
-        context = {"success": "修改成功！新的机器人QQ号为："+str(bot_QQ), "software_list": software_list}
-        return render(request, "change-auth.html", context)
+        try:
+            Authorization.objects.get(bot_QQ=bot_QQ,software=software)
+            context ={"warn":"新的机器人QQ已经存在，请尝试其他Q号或联系管理员","software_list":software_list,"customer_QQ":customer_QQ,"obot_QQ":obot_QQ,"bot_QQ":bot_QQ}
+            return render(request,"change-auth.html",context)
+        except Authorization.DoesNotExist:
+            auth_object.bot_QQ == bot_QQ
+            auth_object.save()
+            context = {"success": "修改成功！新的机器人QQ号为："+str(bot_QQ), "software_list": software_list}
+            return render(request, "change-auth.html", context)
 
 
 
