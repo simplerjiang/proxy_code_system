@@ -772,7 +772,6 @@ def authorization_check(request): #Done
         authorization = Authorization.objects.get(software=software,bot_QQ=bot_QQ)
     except Software.DoesNotExist:
         return dump_and_response("Software_id Wrong!")
-
     except Authorization.DoesNotExist:
         if software.software_try == True:
             #开始试用。
