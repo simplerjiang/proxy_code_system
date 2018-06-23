@@ -705,30 +705,45 @@ bot_QQ 机器人QQ
 "Code already used" 卡密已经被使用过了
 """
 def authorization_make(request): #已测试
+
+    #检查请求模式
     if request.method is "POST":
         return dump_and_response("Error, bad request method POST")
+
+    #获取卡密
     software_code = request.GET['software_code']
+
+    #检查卡密
     try:
         code_object = Time_code.objects.get(code=software_code)
     except:
         return dump_and_response("Code Fail")
+
+    #检查是否用过
     if code_object.used == True:
         return dump_and_response("Code already used")
+
+
     bot_QQ = int(request.GET['bot_QQ'])
     customer_QQ = int(request.GET['customer_QQ'])
+
     software = code_object.software
     time_long = code_object.time
+
     try:
-        authorization = Authorization.objects.get(software=software,bot_QQ=bot_QQ)
+        authorization = Authorization.objects.get(software=software,bot_QQ=bot_QQ) #如果有
         if authorization.deadline_time < timezone.now():
             authorization.deadline_time = datetime.datetime.now()
             authorization.save()
+
         authorization.customer_QQ = customer_QQ
         authorization.deadline_time = authorization.deadline_time + datetime.timedelta(hours=time_long)
+        authorization.proxy_man = code_object.proxy_man
         authorization.save()
         code_object.used = True
         code_object.save()
         return dump_and_response(["success",convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S")])
+
     except Authorization.DoesNotExist: #如果授权不存在，新创立
         authorization = Authorization.objects.create(software=software,
                                                      customer_QQ=customer_QQ,
@@ -759,20 +774,28 @@ bot_QQ 机器人QQ
 """
 def authorization_check(request): #Done
     if request.method is "POST":
-        return dump_and_response("Error, bad request method POST")
+        return dump_and_response("Error, bad request method POST")#返回提示
+    #获取内容
     software_id = request.GET['software_id']
     bot_QQ = request.GET['bot_QQ']
+
+    #尝试转换并检查
     try:
         software_id = int(software_id)
         bot_QQ = int(bot_QQ)
     except ValueError:
         return dump_and_response("Fail")
+
+    #尝试获取
     try:
-        software = Software.objects.get(software_id=software_id)
-        authorization = Authorization.objects.get(software=software,bot_QQ=bot_QQ)
+        software = Software.objects.get(software_id=software_id) #获取软件
+        authorization = Authorization.objects.get(software=software,bot_QQ=bot_QQ) #获取授权
+
+    #软件出错
     except Software.DoesNotExist:
         return dump_and_response("Software_id Wrong!")
 
+    #授权不存在
     except Authorization.DoesNotExist:
         if software.software_try == True:
             #开始试用。
