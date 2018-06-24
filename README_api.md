@@ -476,7 +476,7 @@ bot_QQ 机器人QQ
 
 ## 更换授权机器人QQ(试用授权无法更换）
 
-url:http://127.0.0.1:8000/api/authorization_change/?software_id=1&new_bot_QQ=1414&customer_QQ=123123
+url:http://127.0.0.1:8000/api/authorization_change/?software_id=1&new_bot_QQ=1414&customer_QQ=123123&old_bot_QQ=1234
 
 
 
@@ -502,7 +502,7 @@ customer_QQ 客户QQ
 
 "Wrong QQ Type" 错误的QQ类型，就是说它不是数字
 
-"Exist more then one auth" 新机器人QQ已存在，请更换
+
 
 ---
 
