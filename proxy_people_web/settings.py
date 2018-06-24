@@ -23,7 +23,7 @@ TAIL = "这是一个小尾巴！请在setting文件里添加"
 SECRET_KEY = 'mu9$2i!e2!(5f__(5s$i&uodi2dgd1p#r29bd6u(ymu$d25nb6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
 
@@ -81,9 +81,9 @@ DATABASES = {
     },
 }
 
-ALLOWED_HOSTS = ["127.0.0.1"]
-#请将127.0.0.1替换为你的域名或IP，例子 ['kongsites.com']
-ABSOLUTE_URL = '127.0.0.1'
+ALLOWED_HOSTS = ["*"]
+#请将127.0.0.1替换为你的域名或IP，例子 ['kongsites.com']mail_admin
+ABSOLUTE_URL = '*'
 #请将127.0.0.1替换为你的域名或IP，例子 'kongsites.com'
 
 # Internationalization
@@ -110,7 +110,34 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')     #设置静态文件路径为主目录下的media文件夹
 MEDIA_URL = '/media/'
 
-# 导入模块
+
+#邮箱设置
+
+# 管理员邮箱
+ADMINS = (
+    ('Kong', 'jiangsimpler@gmail.com'), #此网站作者
+)
+
+# 非空链接，却发生404错误，发送通知MANAGERS
+SEND_BROKEN_LINK_EMAILS = True
+MANAGERS = ADMINS
+
+# EMAIL设置
+
+"""
+为了保证有效的将所有危险BUG反馈到此网站作者。
+请设置EMAIL_SMTP服务器。以QQ邮箱为例：
+教程如下：http://service.mail.qq.com/cgi-bin/help?id=28
+"""
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.qq.com'  # QQ邮箱SMTP服务器(邮箱需要开通SMTP服务)
+EMAIL_PORT = 587  # QQ邮箱SMTP服务端口
+EMAIL_HOST_USER = 't-4@qq.com'  # 邮箱账号
+EMAIL_HOST_PASSWORD = 'pkoopqgprqdecagb'  # 授权码
+EMAIL_SUBJECT_PREFIX = '[PCS_web_Bug]'  # 为邮件标题的前缀,默认是'[django]'
+EMAIL_USE_TLS = True  # 开启安全链接
+DEFAULT_FROM_EMAIL = SERVER_EMAIL = EMAIL_HOST_USER #设置发件人
+#日志
 import logging
 import django.utils.log
 import logging.handlers
@@ -133,6 +160,7 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'standard'
         },
+
         'debug': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
@@ -141,12 +169,23 @@ LOGGING = {
             'backupCount': 5,  # 备份份数
             'formatter': 'standard',  # 使用哪种formatters日志格式
         },
+        'mail_admin': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
+        }
     },
     'loggers': {
         'django': {
             'handlers': ['debug','console_debug'],
             'level': 'DEBUG',
-            'propagate': False
+
+            'propagate': True
+        },
+        'django.request': {
+            'handlers': ['debug','console_debug', 'mail_admin'],
+            'level': 'ERROR',
+            'propagate': True,
         },
     }
 }

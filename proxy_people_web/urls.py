@@ -20,7 +20,6 @@ from django.conf.urls.static import static
 from django.conf import settings
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^web_test/$',web_test,name="api_test"),
     url(r'^api/admin_proxy_account_add_api/$',admin_proxy_account_add_API,name='admin_proxy_account_add_API'),
     url(r'^api/admin_proxy_account_topup/$',admin_proxy_account_topup,name='admin_proxy_account_topup'),
     url(r'^api/get_all_software/$',get_all_software,name='get_all_software'),

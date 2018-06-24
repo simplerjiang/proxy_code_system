@@ -15,6 +15,10 @@ from .time_deal import *
 import django.utils.timezone as timezone
 from decimal import *
 from django.conf import settings
+from django.core.mail import send_mail
+import logging
+
+
 
 def dump_and_response(data): #checked
     return HttpResponse(json.dumps(data), content_type="application/json")
