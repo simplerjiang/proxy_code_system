@@ -109,3 +109,44 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')     #设置静态文件路径为主目录下的media文件夹
 MEDIA_URL = '/media/'
+
+# 导入模块
+import logging
+import django.utils.log
+import logging.handlers
+
+LOG_URL = os.path.join(BASE_DIR,'log')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(threadName)s:%(thread)d] [%(name)s:%(lineno)d] [%(module)s:%(funcName)s] [%(levelname)s]- %(message)s'}
+    # 日志格式
+    },
+    'filters': {
+    },
+    'handlers': {
+        'console_debug': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard'
+        },
+        'debug': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR,'log','all.log'),  # 日志输出文件
+            'maxBytes': 1024 * 1024 * 5,  # 文件大小
+            'backupCount': 5,  # 备份份数
+            'formatter': 'standard',  # 使用哪种formatters日志格式
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['debug','console_debug'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
+    }
+}

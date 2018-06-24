@@ -691,7 +691,7 @@ def proxy_get_software_code(request): #已测试
 
 """
 创建授权（续费授权）
-url:http://127.0.0.1:8000/api/authorization_make/?software_code=R4I0Z9r0h5&customer_QQ=123123&bot_QQ=123123
+url:http://127.0.0.1:8000/api/authorization_make/?software_code=v4B3F2j1T2&customer_QQ=123123&bot_QQ=123123
 
 参数：
 software_code 软件卡密
