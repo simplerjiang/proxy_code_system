@@ -149,11 +149,15 @@ money 添加金额
 def admin_proxy_account_topup(request): #Done
     if request.method == "POST":
         return dump_and_response("Error,bad request method POST")
-    admin_code = request.GET['admin_code']
+    try:
+        admin_code = request.GET['admin_code']
+        proxy_username = request.GET['proxy_username']
+        money = Decimal(request.GET['money'])
+    except:
+        return dump_and_response("Error, admin code wrong")
+
     if not admin_code_check(admin_code):
         return dump_and_response("Error, admin code wrong")
-    proxy_username = request.GET['proxy_username']
-    money = Decimal(request.GET['money'])
     if money<=0:
         return dump_and_response("Error, wrong number!")
     user = get_proxy_account(username=proxy_username)
@@ -192,11 +196,14 @@ money 设置金钱
 def admin_proxy_account_balance_setup(request): #Done
     if request.method == "POST":
         return dump_and_response("Error, bad request method POST")
-    admin_code = request.GET['admin_code']
+    try:
+        admin_code = request.GET['admin_code']
+        proxy_username = request.GET['proxy_username']
+        money = request.GET['money']
+    except:
+        return dump_and_response("Error, admin code wrong")
     if not admin_code_check(admin_code):
         return dump_and_response("Error, admin code wrong")
-    proxy_username = request.GET['proxy_username']
-    money = request.GET['money']
     try:
         money = Decimal(money)
     except ValueError:
