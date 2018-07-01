@@ -121,6 +121,14 @@ pytz==2018.4
 本网站使用的是django自带的管理员后台，Url: 127.0.0.1/admin
 默认管理员用户是Kong ，密码123，如需自己创建，请参考[教程](https://jingyan.baidu.com/article/f71d6037770a7b1ab641d1b6.html)
 
+#### API文档
+
+我有专门写了一份本网站的API文档，请点击[API文档](https://github.com/simplerjiang/proxy_code_system/blob/master/README_api.md)
+
+#### 日志
+
+在log文件夹下，有记录所有的错误以及底层sql操作。
+
 #### 付费客制化
 
 本网站由simplerjiang 完成，如果你有定制此网站需求，可联系。
