@@ -88,6 +88,10 @@
 
 ## 架设环境及说明：
 
+#### 简易安装
+
+简易安装主要应用于windows系统，低并发条件下，如有需要高并发或追求更好的性能，请试用专业安装。
+
 本网站系统由 `Python3.6.5 + Django1.8.2` 环境下编写。
 
 新手安装说明及步骤： [点击打开后继续点击View Raw](https://github.com/simplerjiang/proxy_code_system/blob/master/%E4%B8%BB%E7%AB%99%E6%9E%B6%E8%AE%BE%E6%95%99%E7%A8%8B.docx)
@@ -99,4 +103,15 @@ mysqlclient==1.3.12
 pytz==2018.4
 ```
 
-## 分站说明：
+#### 专业安装
+
+推荐使用：nginx + uwsgi + django + Unix系统
+由于步骤繁杂，在这里不做多介绍，可自行百度。
+
+---
+
+## 付费客制化
+
+本网站由simplerjiang 完成，如果你有定制此网站需求，可联系。
+邮箱：jiangsimpler@gmail.com
+QQ: 1013171256
