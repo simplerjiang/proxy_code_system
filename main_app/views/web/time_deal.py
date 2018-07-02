@@ -22,3 +22,4 @@ def convert_local_timezone(time_in):
     local_dt = local.localize(time_in, is_dst=None)
     time_utc = local_dt.astimezone(pytz.utc)
     return time_utc
+

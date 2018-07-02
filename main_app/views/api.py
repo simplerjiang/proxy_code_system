@@ -17,8 +17,45 @@ from decimal import *
 from django.conf import settings
 from django.core.mail import send_mail
 import logging
+import sys
+from ctypes import *
+import time
 
+def encipher(v, k): #加密
+    y = c_uint32(v[0])
+    z = c_uint32(v[1])
+    sum = c_uint32(0)
+    delta = 0x9e3779b9
+    n = 32
+    w = [0,0]
 
+    while(n>0):
+        sum.value += delta
+        y.value += ( z.value << 4 ) + k[0] ^ z.value + sum.value ^ ( z.value >> 5 ) + k[1]
+        z.value += ( y.value << 4 ) + k[2] ^ y.value + sum.value ^ ( y.value >> 5 ) + k[3]
+        n -= 1
+
+    w[0] = y.value
+    w[1] = z.value
+    return w
+
+def decipher(v, k): #解密
+    y = c_uint32(v[0])
+    z = c_uint32(v[1])
+    sum = c_uint32(0xc6ef3720)
+    delta = 0x9e3779b9
+    n = 32
+    w = [0,0]
+
+    while(n>0):
+        z.value -= ( y.value << 4 ) + k[2] ^ y.value + sum.value ^ ( y.value >> 5 ) + k[3]
+        y.value -= ( z.value << 4 ) + k[0] ^ z.value + sum.value ^ ( z.value >> 5 ) + k[1]
+        sum.value -= delta
+        n -= 1
+
+    w[0] = y.value
+    w[1] = z.value
+    return w
 
 def dump_and_response(data): #checked
     return HttpResponse(json.dumps(data), content_type="application/json")
@@ -778,6 +815,7 @@ bot_QQ 机器人QQ
 
 返回值：
 ["success","2018-05-06 15:01:35","测试广告"] 如果成功，第二个值会为到期时间，第三个是代理商的广告
+["success", [2181887854, 358233452], "测试广告"] 如果开启了TEA加密就是第二个值是一个列表，解密出来第一个是到期时间的unix时间戳，第二个是授权的机器人QQ
 ["try_success","2018-05-06 15:01:35"] 如果是试用，则返回此内容，不返回代理广告
 "Fail" 已过期或不存在
 "Error,bad request method POST" 错误的请求模式
@@ -817,17 +855,46 @@ def authorization_check(request): #Done
             authorization.save()
             authorization.deadline_time = authorization.deadline_time + datetime.timedelta(hours=software.software_try_hours)
             authorization.save()
-            return dump_and_response(["try_success",convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S"),settings.TAIL])
+            if settings.TEA_ABLE == True: #开始加密
+                time_scode = [1,bot_QQ]
+                time_scode[0] = int(time.mktime(convert_timezone(authorization.deadline_time).timetuple()))
+                first_scode = encipher(time_scode,settings.TEA_KEY)
+                if settings.TEA_ABLE_SECOND == True:
+                    second_scode = encipher(first_scode,settings.TEA_KEY2)
+                    return dump_and_response(["try_success",second_scode,settings.TAIL])
+                else:
+                    return dump_and_response(["try_success",first_scode,settings.TAIL])
+            else:
+                return dump_and_response(["try_success",convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S"),settings.TAIL])
         else:
             return dump_and_response('Fail')
     if authorization.deadline_time < timezone.now():
         return dump_and_response('Fail')
     else:
         if authorization.proxy_man == None:
-            return dump_and_response(
-                ["try_success", convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S"),settings.TAIL])
+            if settings.TEA_ABLE == True: #开始加密
+                time_scode = [1,bot_QQ]
+                time_scode[0] = int(time.mktime(convert_timezone(authorization.deadline_time).timetuple()))
+                first_scode = encipher(time_scode,settings.TEA_KEY)
+                if settings.TEA_ABLE_SECOND == True:
+                    second_scode = encipher(first_scode,settings.TEA_KEY2)
+                    return dump_and_response(["try_success",second_scode,settings.TAIL])
+                else:
+                    return dump_and_response(["try_success",first_scode,settings.TAIL])
+            else:
+                return dump_and_response(["try_success", convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S"),settings.TAIL])
         proxy_man_others_info = Others_info.objects.get(user=authorization.proxy_man)
-        return dump_and_response(["success",convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S"),proxy_man_others_info.ad])
+        if settings.TEA_ABLE == True:  # 开始加密
+            time_scode = [1, bot_QQ]
+            time_scode[0] = int(time.mktime(convert_timezone(authorization.deadline_time).timetuple()))
+            first_scode = encipher(time_scode, settings.TEA_KEY)
+            if settings.TEA_ABLE_SECOND == True:
+                second_scode = encipher(first_scode, settings.TEA_KEY2)
+                return dump_and_response(["success", second_scode, proxy_man_others_info.ad])
+            else:
+                return dump_and_response(["success", first_scode, proxy_man_others_info.ad])
+        else:
+            return dump_and_response(["success",convert_timezone(authorization.deadline_time).strftime("%Y-%m-%d %H:%M:%S"),proxy_man_others_info.ad])
 
 """
 更换授权机器人QQ （软件使用）

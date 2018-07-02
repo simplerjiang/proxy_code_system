@@ -1,0 +1,64 @@
+2018-07-02 18:47:50,480 [Thread-1:13164] [django.request:256] [base:handle_uncaught_exception] [ERROR]- Internal Server Error: /api/authorization_check/
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python36\lib\site-packages\django\core\handlers\base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Proxy_codes_system\proxy_people_web\proxy_code_system\proxy_code_system\main_app\views\api.py", line 886, in authorization_check
+    first_scode = encipher(time_scode, settings.TEA_KEY)
+  File "D:\Proxy_codes_system\proxy_people_web\proxy_code_system\proxy_code_system\main_app\views\api.py", line 25, in encipher
+    y = c_uint32(v[0])
+TypeError: 'datetime.datetime' object is not subscriptable
+2018-07-02 18:48:48,114 [Thread-12:3292] [django.request:256] [base:handle_uncaught_exception] [ERROR]- Internal Server Error: /api/authorization_check/
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python36\lib\site-packages\django\core\handlers\base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Proxy_codes_system\proxy_people_web\proxy_code_system\proxy_code_system\main_app\views\api.py", line 886, in authorization_check
+    first_scode = encipher(time_scode, settings.TEA_KEY)
+  File "D:\Proxy_codes_system\proxy_people_web\proxy_code_system\proxy_code_system\main_app\views\api.py", line 25, in encipher
+    y = c_uint32(v[0])
+TypeError: 'datetime.datetime' object is not subscriptable
+2018-07-02 18:49:36,445 [Thread-1:10804] [django.request:256] [base:handle_uncaught_exception] [ERROR]- Internal Server Error: /api/authorization_check/
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python36\lib\site-packages\django\core\handlers\base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Proxy_codes_system\proxy_people_web\proxy_code_system\proxy_code_system\main_app\views\api.py", line 885, in authorization_check
+    time_scode = int(convert_timezone(authorization.deadline_time))
+TypeError: int() argument must be a string, a bytes-like object or a number, not 'datetime.datetime'
+2018-07-02 18:53:01,241 [Thread-1:2440] [django.request:256] [base:handle_uncaught_exception] [ERROR]- Internal Server Error: /api/authorization_check/
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python36\lib\site-packages\django\core\handlers\base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Proxy_codes_system\proxy_people_web\proxy_code_system\proxy_code_system\main_app\views\api.py", line 886, in authorization_check
+    first_scode = encipher(time_scode, settings.TEA_KEY)
+  File "D:\Proxy_codes_system\proxy_people_web\proxy_code_system\proxy_code_system\main_app\views\api.py", line 25, in encipher
+    y = c_uint32(v[0])
+TypeError: 'int' object is not subscriptable
+2018-07-02 18:53:51,760 [Thread-3:7212] [django.request:256] [base:handle_uncaught_exception] [ERROR]- Internal Server Error: /api/authorization_check/
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python36\lib\site-packages\django\core\handlers\base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Proxy_codes_system\proxy_people_web\proxy_code_system\proxy_code_system\main_app\views\api.py", line 886, in authorization_check
+    first_scode = encipher(time_scode, settings.TEA_KEY)
+  File "D:\Proxy_codes_system\proxy_people_web\proxy_code_system\proxy_code_system\main_app\views\api.py", line 25, in encipher
+    y = c_uint32(v[0])
+TypeError: 'int' object is not subscriptable
+2018-07-02 18:54:39,628 [Thread-1:4932] [django.request:256] [base:handle_uncaught_exception] [ERROR]- Internal Server Error: /api/authorization_check/
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python36\lib\site-packages\django\core\handlers\base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Proxy_codes_system\proxy_people_web\proxy_code_system\proxy_code_system\main_app\views\api.py", line 885, in authorization_check
+    time_scode = list(int(time.mktime(convert_timezone(authorization.deadline_time).timetuple())))
+TypeError: 'int' object is not iterable
+2018-07-02 19:02:24,198 [Thread-1:12852] [django.request:256] [base:handle_uncaught_exception] [ERROR]- Internal Server Error: /api/authorization_check/
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python36\lib\site-packages\django\core\handlers\base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Proxy_codes_system\proxy_people_web\proxy_code_system\proxy_code_system\main_app\views\api.py", line 888, in authorization_check
+    time_scode[0] = list(int(time.mktime(convert_timezone(authorization.deadline_time).timetuple())))
+TypeError: 'int' object is not iterable
+2018-07-02 19:03:24,249 [Thread-4:3120] [django.request:256] [base:handle_uncaught_exception] [ERROR]- Internal Server Error: /api/authorization_check/
+Traceback (most recent call last):
+  File "C:\Users\Administrator\AppData\Local\Programs\Python\Python36\lib\site-packages\django\core\handlers\base.py", line 132, in get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Proxy_codes_system\proxy_people_web\proxy_code_system\proxy_code_system\main_app\views\api.py", line 888, in authorization_check
+    time_scode[0] = int(time.mktime(convert_timezone(authorization.deadline_time).timetuple()))
+TypeError: 'int' object is not iterable

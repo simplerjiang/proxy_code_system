@@ -19,6 +19,11 @@ TAIL = "这是一个小尾巴！请在setting文件里添加"
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
+TEA_ABLE = False #是否开启tea加密返回api
+TEA_ABLE_SECOND = False #是否对返回时间戳进行双重加密
+TEA_KEY = [30,32,21,14] #TEA加密的key
+TEA_KEY2 = [1,2,3,4] #第二次加密的key
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'mu9$2i!e2!(5f__(5s$i&uodi2dgd1p#r29bd6u(ymu$d25nb6'
 
