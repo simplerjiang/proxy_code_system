@@ -83,8 +83,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
-}
+		},
+    }
 
 ALLOWED_HOSTS = ["*"]
 #请将127.0.0.1替换为你的域名或IP，例子 ['kongsites.com']mail_admin
