@@ -1,225 +1,178 @@
-# 软件提卡、授权、代理人员系统三合一
+# proxy_code_system
 
----
+一个历史版本的 **Python / Django 业务型 Web 项目**，围绕 **软件授权、自动发卡、多级代理、余额结算与后台运营** 展开。
 
-**新消息，本网站的2.0版本已经写完了，更多可定制化内容，并且内置了扫码支付等个人免签收款
-2.0版本的测试站为： [2.0版本测试站](http://testproxy.kongsites.com/)  由于主页的一些图片我还要进行收集，所以晚点我会将文档和测试账号发出来。
-2.0版本将为收费版本，价格500+，需要对接支付接口1000+，帮忙搭建，有需要可联系QQ:1013171256，晚点会进行详细宣传。**
+这个仓库保留的是较早期的实现版本。虽然技术栈已经偏旧，但它仍然能代表我做过的完整业务系统实践，而不只是单点功能 Demo。
 
----
+## 项目定位
 
-**目前提供了一个 [软件提卡+代理人员管理系统二合一](https://github.com/simplerjiang/proxy_people_web_H)**
+这个项目尝试把几类常见的数字产品销售与授权流程整合到同一个系统中：
 
-**主要针对一些需要自己添卡的站长。如果你不需要给你自己的软件提加授权系统！请使用上面链接的系统。**
+- 软件授权验证
+- 自动生成与发放卡密
+- 多级代理账户体系
+- 代理余额、转账与提现申请
+- 管理后台与公告系统
+- 对外 API 接口与基础加密方案
 
-**本三合一系统因包括了全自动化流程，所以全程由网站自动生成卡密，处理授权时间，站长只需要添加“软件”即刻全自动化作业！**
+从仓库结构来看，它不是一个单页示例，而是包含：
 
-**由于本源码属于开源非盈利性，所以并没有在代码中提供第三方支付接口，如有需要，可联系QQ:1013171256 进行付费定制对接谢谢**
+- Django 项目配置
+- 业务模型
+- Web 页面模板
+- 静态资源
+- API 文档
+- 数据库文件
+- 日志目录
 
-## 网页展示
+的完整 Web 工程。
 
-#### 主页（代理账户后台）
+## 技术栈
 
-![主页](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/index.png)
+- Python 3.6.x
+- Django 1.8.3
+- SQLite（仓库内默认示例数据库）
+- 可迁移到 MySQL 等数据库
+- HTML / CSS 模板页面
 
-#### 登陆页面
+> 注意：这是一个历史代码库，不建议直接用现代 Python / Django 版本无修改上线生产。
 
-![登陆页面](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/login.png)
+## 核心能力
 
-#### 注册页面
+### 1. 软件授权系统
 
-![注册页面](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/reg.png)
+- 支持授权创建、授权查询、续费与机器人绑定变更
+- 支持试用授权逻辑
+- 提供授权查询 API
 
-#### 购买软件卡密页面
+### 2. 自动发卡系统
 
-![购买软件卡密页面](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/software_list.png)
+- 软件与套餐信息可配置
+- 卡密自动生成
+- 支持代理提卡、卡密使用状态记录
 
-![选择数量](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/buy_item.png)
+### 3. 多级代理体系
 
-#### 提卡卡密
+- 代理等级与折扣体系
+- 支持开设下级代理账号
+- 支持上下级关系与收益流转场景
 
-![提取卡密](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/get_code_list.png)
+### 4. 余额与资金流转
 
-#### 余额不足页面（所有错误页面都有，但是我没截图）
+- 代理账户余额管理
+- 管理员充值 / 清零
+- 上级向下级转账
+- 提现申请记录
 
-![余额不足](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/wrong.png)
+### 5. 后台与运营能力
 
-#### 个人资料修改页面
+- Django Admin 管理后台
+- 公告系统
+- 交易记录与操作留痕
 
-![个人资料](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/profile.png)
+### 6. API 能力
 
-#### 转账页面
+仓库内保留了较完整的 API 文档，涵盖：
 
-![转账](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/transfer.png)
+- 管理员 API
+- 代理账户 API
+- 软件与价格接口
+- 授权与卡密相关接口
 
-#### 管理下级代理
+详细见：[`README_api.md`](README_api.md)
 
-![管理下级](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/contorl_down_proxy.png)
+## 业务模型概览
 
-#### 管理授权
+从 `main_app/models.py` 可以看到项目已经定义了较完整的业务模型，包括：
 
-![管理授权](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/contorl_auth.png)
+- `Others_info`：代理扩展信息、余额、广告、等级、TOKEN
+- `Software`：软件与套餐配置
+- `Authorization`：授权记录
+- `Time_code`：卡密与使用状态
+- `Deal_record`：交易流水
+- `Getmoney`：提现申请
+- `Notice`：公告
+- `Question`：工单 / 问题记录
 
-#### 网站管理员登陆
+这也是我保留这个仓库的重要原因之一：它反映的是一个真实业务系统的数据建模过程。
 
-![网站管理员](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/admin_login.png)
+## 项目结构
 
-#### 网站管理员页面
-
-![网站管理员页面](https://github.com/simplerjiang/proxy_code_system/blob/master/README_img/admin_control.png)
-
-
-
----
-
-## 重大决定
-
-请暂时不要使用一键架设，因为Python3.7不支持本网站源码（某些神奇的原因，Python真的不好用）
-
-其次！我将使用Asp.net来重构此网站，并重新规划功能，保证大部分使用者都可以快速搭建，快速上手。
-
-代理人员系统三合一网站V2.0即将着手开发，所以此版本将不会再更新（或者维护），但具多个用户使用后，
-
-已经几乎没有Bug存在。
-
-这里要吐槽一下，Python不好玩，.net才是最好的！
-
----
-
-## 功能说明:
-
-此网站系统是集成了以下多种功能：
-
-#### 软件授权验证系统
-
-通过API接口进行验证使用者是否拥有授权。
-软件可设置使用时间，如使用者没有授权，将自动添加试用授权。
-
-#### 网站自动生成卡密系统
-
-内部对接授权系统，实现全自动生成卡密，无需人工放入卡密。
-网站系统内置账户金额，用户自助选卡买卡，自助充值授权。
-
-#### 多级别代理系统
-
-原定有20级不同的VIP，VIP20 为最高级别，VIP0 为最低级别。每一级折扣为0.5折，既VIP20级
-为免费提卡，VIP5级为2.5折。同时代理可开设下级代理账号（低于开通账号的等级），如下级账户
-购买了卡密，将有一部分金额分成给上级代理，使得代理有钱可赚。
-
-#### 提现系统
-
-设定有提现系统，用户可申请提现，并由管理员完成。
-
-#### 公告系统
-
-公告系统，将轮番展示公告在用户界面上。
-
-#### 安全性
-
-经测试，可有效防止注入，伪造等普遍攻击方式。
-
-并在上一次更新中，加入了授权查询API的可加密选项。
-
-#### 一键启动
-
-目前支持Windows系统32位与64位一键部署环境与启动。
-详细说明请浏览下面 一键启动说明
-
----
-
-## 待加入的内容
-
-- [X] API授权查询安全加密
-
-- [X] windows系统自动化部署脚本
-
-- [ ] Linux系统自动化部署脚本
-
-- [ ] 工单系统
-
-- [ ] 将主版本(master)修改为以ip为判断根据，代替机器人QQ
-
-- [ ] 欢迎提出更多建议，如合理我将加入待更新的内容中。
-
----
-
-## 架设环境及说明：
-
-#### 一键部署与启动
-
-打开 "便捷搭建与开启.exe" 文件
-
-如果你没有安装Python请先选择 "1.部署Python环境"
-
-完成后请重新打开此文件，并选择 "2.下载模块依赖"
-
-不出意外的话，都是正常完成。便可选择 "3.开启网站"
-
-请保证80端口不被占用，之后就可以通过服务器域名或IP访问到。
-
-如果你要在本机上测试网站，可选择 "4.测试网站"
-
-与上相同，可通过http://127.0.0.1:8000/ 访问。
-
-注意！！！步骤1,2是第一次运行时使用，不需要每次都使用！
-
-本方法只适用于没有Python使用基础的朋友，如果你懂一些编程基础，
-
-推荐根据下面的方式进行手动部署。
-
-#### 简易安装
-
-简易安装主要应用于windows系统，低并发条件下，如有需要高并发或追求更好的性能，请试用专业安装。
-
-本网站系统由 `Python3.6.5 + Django1.8.2` 环境下编写。
-
-新手安装说明及步骤： [点击打开后继续点击View Raw](https://github.com/simplerjiang/proxy_code_system/blob/master/%E4%B8%BB%E7%AB%99%E6%9E%B6%E8%AE%BE%E6%95%99%E7%A8%8B.docx)
-
-需要的依赖模块（已在安装步骤中集成）：
-``` python3
-Django==1.8.3
-mysqlclient==1.3.12
-pytz==2018.4
+```text
+main_app/          核心业务逻辑、模型、视图与后台配置
+proxy_people_web/  Django 项目配置、路由与 settings
+templates/         页面模板
+static/            静态资源
+README_api.md      API 说明
+README_img/        页面截图
+manage.py          Django 项目入口
+requirements.txt   Python 依赖
 ```
 
-#### 专业安装
+## 页面截图
 
-推荐使用：nginx + uwsgi + django + Unix系统
-由于步骤繁杂，在这里不做多介绍，可自行百度。
+### 代理账户后台首页
 
----
-## 详细说明
+![主页](README_img/index.png)
 
-#### 数据库说明
+### 登录页
 
-本版本使用的是Sqlite，数据库文件为：db.sqlite3。此数据库文件是有一定的测试内容，你可以在admin界面将它删除，或复制 “空白数据库（NULL DB)”中的数据库，并覆盖主文件夹中的db.sqlite3
-。django可采用Mysql或其他数据库，请自行百度教程，或联系我进行付费客制化。提醒：如果要更换其他数据库，请先进行数据迁移，保证新数据库已经包含有表结构。
+![登录页](README_img/login.png)
 
-#### 管理后台
+### 注册页
 
-本网站使用的是django自带的管理员后台，Url: 127.0.0.1/admin
-默认管理员用户是Kong ，密码123，如需自己创建，请参考[教程](https://jingyan.baidu.com/article/f71d6037770a7b1ab641d1b6.html)
+![注册页](README_img/reg.png)
 
-#### API文档
+### 购买卡密页
 
-我有专门写了一份本网站的API文档，请点击[API文档](https://github.com/simplerjiang/proxy_code_system/blob/master/README_api.md)
+![购买软件卡密页面](README_img/software_list.png)
 
-#### 日志
+### 提卡页面
 
-在log文件夹下，有记录所有的错误以及底层sql操作。
+![提取卡密](README_img/get_code_list.png)
 
-#### 付费客制化
+### 管理后台页面
 
-本网站由simplerjiang 完成，如果你有定制此网站需求，可联系。
-邮箱：jiangsimpler@gmail.com
-QQ: 1013171256
+![网站管理员页面](README_img/admin_control.png)
 
----
+## 运行说明
 
-## 未完待续...
+这是一个历史 Django 项目，推荐按“保守兼容”的方式运行：
 
-有许多具体操作以及设置，晚些我会写入文档中。
+1. 准备 Python 3.6.x 环境
+2. 安装依赖：`requirements.txt`
+3. 根据需要调整 `settings.py`
+4. 使用 SQLite 示例数据库，或迁移到 MySQL 后再运行
+5. 执行 Django 常规启动流程
 
-本网站以及经过两个月测试，并有正式上线并用于生产环境中。
+如果你只是想阅读代码和业务流程，不一定需要真的把它跑起来；它更大的价值在于：
 
-如发现bug，请发送邮件到：jiangsimpler@gmail.com
+- 业务结构完整
+- 模型定义明确
+- 页面与 API 都有保留
+- 能体现早期完整项目经验
+
+## 当前状态
+
+这个仓库当前主要用于：
+
+- 保留历史实现
+- 展示业务系统经验
+- 整理文档与项目说明
+
+它不是我当前主推的技术栈项目，但它仍然是我公开仓库里有代表性的 **Python / Django 业务系统**。
+
+## Related
+
+- 精简版相关项目：[`proxy_people_web_H`](https://github.com/simplerjiang/proxy_people_web_H)
+- API 文档：[`README_api.md`](README_api.md)
+
+## 为什么我保留这个仓库
+
+虽然它已经是旧技术栈，但它能说明几件事：
+
+- 我做过完整的业务型 Web 系统
+- 我处理过授权、卡密、代理、后台、交易记录等多角色流程
+- 我不只是写过工具类库，也做过带业务规则和数据模型的系统
+
+从求职展示的角度看，它更适合作为 **历史代表项目** 存在。
